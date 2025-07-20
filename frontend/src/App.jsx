@@ -1,19 +1,18 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { StoryProvider } from './contexts/StoryContext';
-import { NotificationProvider } from './contexts/NotificationContext';
-import HomePage from './pages/HomePage/HomePage';
-import StoriesPage from './pages/StoriesPage/StoriesPage';
-import StoryDetailPage from './pages/StoryDetailPage/StoryDetailPage';
-import ProposalsPage from './pages/ProposalsPage/ProposalsPage';
-import ProposalDetailPage from './pages/ProposalDetailPage/ProposalDetailPage';
-import CreateStoryPage from './pages/CreateStoryPage/CreateStoryPage';
-import ProfilePage from './pages/ProfilePage/ProfilePage';
-import CommunityPage from './pages/CommunityPage/CommunityPage';
-import NFTCollectionPage from './pages/NFTCollectionPage/NFTCollectionPage';
-import './styles/globals.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import { StoryProvider } from "./contexts/StoryContext";
+import { NotificationProvider } from "./contexts/NotificationContext";
+import HomePage from "./pages/HomePage/HomePage";
+import StoriesPage from "./pages/StoriesPage/StoriesPage";
+import StoryDetailPage from "./pages/StoryDetailPage/StoryDetailPage";
+import ProposalsPage from "./pages/ProposalsPage/ProposalsPage";
+import ProposalDetailPage from "./pages/ProposalDetailPage/ProposalDetailPage";
+import CreateStoryPage from "./pages/CreateStoryPage/CreateStoryPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import CommunityPage from "./pages/CommunityPage/CommunityPage";
+import NFTCollectionPage from "./pages/NFTCollectionPage/NFTCollectionPage";
+import "./styles/globals.css";
 
 const App = () => {
   return (
