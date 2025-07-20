@@ -43,13 +43,21 @@
 
 /* Hero section */
 .hero {
-  background: linear-gradient(135deg, var(--primary-50) 0%, var(--secondary-50) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-50) 0%,
+    var(--secondary-50) 100%
+  );
   padding: var(--space-16) 0;
   margin-bottom: var(--space-8);
 }
 
 [data-theme="dark"] .hero {
-  background: linear-gradient(135deg, var(--primary-900) 0%, var(--secondary-900) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--primary-900) 0%,
+    var(--secondary-900) 100%
+  );
 }
 
 @media (max-width: 768px) {
@@ -155,7 +163,7 @@
   .grid4 {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .grid3 {
     grid-template-columns: repeat(2, 1fr);
   }

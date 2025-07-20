@@ -1,5 +1,6 @@
 import { createThirdwebClient, getContract } from "thirdweb";
 import abi from "../../abi.json";
+import { baseSepolia } from "thirdweb/chains";
 
 //contract address
 const address = "0x38D852B2Af85646EF547c8C19103EB44B8150d8D";
@@ -10,7 +11,7 @@ export const client = createThirdwebClient({
 
 export const contract = getContract({
   client,
-  chainId: 128123,
+  chain: baseSepolia,
   address,
   abi,
 });

@@ -3,10 +3,10 @@ import {
   sendTransaction,
   getContractEvents,
 } from "thirdweb";
-import { contract } from "./src/clients/thirdWebClient";
-import { useActiveAccount } from "thirdweb/react";
+import { contract } from "../clients/thirdWebClient";
+// import { useActiveAccount } from "thirdweb/react";
 
-const account = useActiveAccount();
+// const account = useActiveAccount();
 
 export const createStoryProposal = async () => {
   const transaction = prepareContractCall({
@@ -25,7 +25,7 @@ export const createStoryProposal = async () => {
 
   const reciept = await sendTransaction({
     transaction,
-    account,
+    account: "oxdkddshd",
   });
 
   console.log(reciept);

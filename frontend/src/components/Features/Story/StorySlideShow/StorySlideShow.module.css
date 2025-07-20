@@ -164,11 +164,11 @@
     width: 40px;
     height: 40px;
   }
-  
+
   .prevButton {
     left: var(--space-2);
   }
-  
+
   .nextButton {
     right: var(--space-2);
   }
@@ -186,8 +186,8 @@
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 2px;
+  height: 2px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.4);

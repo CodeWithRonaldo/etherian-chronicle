@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import Badge from '../../../UI/Badge/Badge';
-import Avatar from '../../../UI/Avatar/Avatar';
-import Button from '../../../UI/Button/Button';
-import styles from './ProposalCarousel.module.css';
+import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import Badge from "../../../UI/Badge/Badge";
+import Avatar from "../../../UI/Avatar/Avatar";
+import Button from "../../../UI/Button/Button";
+import styles from "./ProposalCarousel.module.css";
 
 const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
   const scrollContainerRef = useRef(null);
@@ -12,7 +12,8 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
 
   const checkScrollButtons = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
     }
@@ -21,37 +22,42 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
       const scrollAmount = 320; // Width of one card plus gap
-      const newScrollLeft = scrollContainerRef.current.scrollLeft + 
-        (direction === 'left' ? -scrollAmount : scrollAmount);
-      
+      const newScrollLeft =
+        scrollContainerRef.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
+
       scrollContainerRef.current.scrollTo({
         left: newScrollLeft,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
   };
 
   const getStatusVariant = (status) => {
     switch (status) {
-      case 'pending': return 'warning';
-      case 'approved': return 'success';
-      case 'rejected': return 'error';
-      default: return 'neutral';
+      case "pending":
+        return "warning";
+      case "approved":
+        return "success";
+      case "rejected":
+        return "error";
+      default:
+        return "neutral";
     }
   };
 
   const getGenreColor = (genre) => {
     const genreColors = {
-      fantasy: 'primary',
-      'sci-fi': 'secondary',
-      mystery: 'accent',
-      romance: 'error',
-      horror: 'neutral',
-      drama: 'warning',
-      steampunk: 'secondary',
-      dystopian: 'neutral',
+      fantasy: "primary",
+      "sci-fi": "secondary",
+      mystery: "accent",
+      romance: "error",
+      horror: "neutral",
+      drama: "warning",
+      steampunk: "secondary",
+      dystopian: "neutral",
     };
-    return genreColors[genre] || 'neutral';
+    return genreColors[genre] || "neutral";
   };
 
   const getTimeRemaining = (deadline) => {
@@ -60,7 +66,7 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
     const diff = deadlineDate.getTime() - now.getTime();
 
     if (diff <= 0) {
-      return { text: 'Voting ended', urgent: false };
+      return { text: "Voting ended", urgent: false };
     }
 
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -86,31 +92,43 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
         <h2 className={styles.title}>{title}</h2>
         <div className={styles.controls}>
           <button
-            className={`${styles.scrollButton} ${!canScrollLeft ? styles.disabled : ''}`}
-            style={{ width: '48px', height: '48px' }}
-            onClick={() => scroll('left')}
+            className={`${styles.scrollButton} ${
+              !canScrollLeft ? styles.disabled : ""
+            }`}
+            style={{ width: "48px", height: "48px" }}
+            onClick={() => scroll("left")}
             disabled={!canScrollLeft}
             aria-label="Scroll left"
           >
             <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </button>
           <button
-            className={`${styles.scrollButton} ${!canScrollRight ? styles.disabled : ''}`}
-            style={{ width: '48px', height: '48px' }}
-            onClick={() => scroll('right')}
+            className={`${styles.scrollButton} ${
+              !canScrollRight ? styles.disabled : ""
+            }`}
+            style={{ width: "48px", height: "48px" }}
+            onClick={() => scroll("right")}
             disabled={!canScrollRight}
             aria-label="Scroll right"
           >
             <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </button>
         </div>
       </div>
 
-      <div 
+      <div
         className={styles.scrollContainer}
         ref={scrollContainerRef}
         onScroll={checkScrollButtons}
@@ -144,7 +162,7 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
 
                 <div className={styles.content}>
                   <h3 className={styles.proposalTitle}>{proposal.title}</h3>
-                  
+
                   <div className={styles.creator}>
                     <Avatar
                       src={proposal.creator.avatar}
@@ -159,23 +177,56 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
                   <div className={styles.footer}>
                     <div className={styles.voteStats}>
                       <div className={styles.voteStat}>
-                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {proposal.votes.yes}
                       </div>
                       <div className={styles.voteStat}>
-                        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {proposal.votes.no}
                       </div>
-                      <span className={styles.totalVotes}>{totalVotes} total</span>
+                      <span className={styles.totalVotes}>
+                        {totalVotes} total
+                      </span>
                     </div>
-                    
-                    <div className={`${styles.deadline} ${timeRemaining.urgent ? styles.urgent : ''}`}>
-                      <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+
+                    <div
+                      className={`${styles.deadline} ${
+                        timeRemaining.urgent ? styles.urgent : ""
+                      }`}
+                    >
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       {timeRemaining.text}
                     </div>
