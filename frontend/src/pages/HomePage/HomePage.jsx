@@ -13,18 +13,26 @@ import { useAuth } from "../../contexts/AuthContext";
 import { mockLeaderboard } from "../../mock-data/stories";
 import Avatar from "../../components/UI/Avatar/Avatar";
 import { useActiveAccount } from "thirdweb/react";
+import useEtherian from "../../hooks/useEtherian";
 
 const HomePage = () => {
   const { stories, proposals, loading } = useStory();
   const { user } = useAuth();
   const account = useActiveAccount();
+  const { storyProposed } = useEtherian();
 
   const featuredStories = stories.slice(0, 5);
   const recentProposals = proposals.slice(0, 6);
   const topCommunityMembers = mockLeaderboard.slice(0, 5);
+
   useEffect(() => {
-    console.log(account);
-  });
+    const laka = async () => {
+      console.log(account);
+      const lakaka = await storyProposed();
+      console.log(lakaka);
+    };
+    laka();
+  }, [account, storyProposed]);
 
   if (loading) {
     return <PageContainer loading={true} />;

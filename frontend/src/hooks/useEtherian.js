@@ -6,7 +6,7 @@ import {
 import { contract } from "../clients/thirdWebClient";
 import { useActiveAccount } from "thirdweb/react";
 
-export function useEtherian() {
+export default function useEtherian() {
   const account = useActiveAccount();
 
   const createStoryProposal = async (storyDetails) => {
