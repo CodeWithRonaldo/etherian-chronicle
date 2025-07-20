@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../../../UI/Button/Button';
-import LoadingSpinner from '../../../UI/LoadingSpinner/LoadingSpinner';
 import { useNotification } from '../../../../contexts/NotificationContext';
 import styles from './VotingInterface.module.css';
+import LoadingSpinner from '../../../UI/LoadingSpinner/LoadingSpinner';
+
+
+
+
 
 const VotingInterface = ({
   title,
