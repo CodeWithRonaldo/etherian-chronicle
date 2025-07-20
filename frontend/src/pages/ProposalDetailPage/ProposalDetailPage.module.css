@@ -273,7 +273,7 @@
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em);
+  letter-spacing: (0.05em);
 }
 
 .deadline {
