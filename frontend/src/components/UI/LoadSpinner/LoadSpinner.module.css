@@ -1,0 +1,97 @@
+.spinner {
+  display: inline-block;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Sizes */
+.small {
+  width: 16px;
+  height: 16px;
+  border-width: 1px;
+}
+
+.medium {
+  width: 24px;
+  height: 24px;
+}
+
+.large {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+}
+
+.xlarge {
+  width: 48px;
+  height: 48px;
+  border-width: 4px;
+}
+
+/* Variants */
+.primary {
+  color: var(--primary-500);
+}
+
+.secondary {
+  color: var(--text-tertiary);
+}
+
+.white {
+  color: white;
+}
+
+/* Full page loading */
+.fullPage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  z-index: 9999;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+/* Center in container */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Text with spinner */
+.withText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.text {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}

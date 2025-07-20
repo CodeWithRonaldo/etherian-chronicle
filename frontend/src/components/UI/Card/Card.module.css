@@ -1,0 +1,138 @@
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  border-color: var(--primary-200);
+}
+
+.interactive:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Variants */
+.elevated {
+  box-shadow: var(--shadow-lg);
+}
+
+.elevated:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+.outlined {
+  border: 2px solid var(--border-primary);
+  box-shadow: none;
+}
+
+.outlined:hover {
+  border-color: var(--primary-300);
+  box-shadow: var(--shadow-sm);
+}
+
+.filled {
+  background-color: var(--primary-50);
+  border-color: var(--primary-200);
+}
+
+[data-theme="dark"] .filled {
+  background-color: var(--primary-900);
+  border-color: var(--primary-800);
+}
+
+/* Card Header */
+.header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.headerCompact {
+  padding: var(--space-4);
+}
+
+/* Card Body */
+.body {
+  padding: var(--space-6);
+}
+
+.bodyCompact {
+  padding: var(--space-4);
+}
+
+.bodyNoPadding {
+  padding: 0;
+}
+
+/* Card Footer */
+.footer {
+  padding: var(--space-6);
+  border-top: 1px solid var(--border-primary);
+  background-color: var(--bg-tertiary);
+}
+
+.footerCompact {
+  padding: var(--space-4);
+}
+
+/* Image */
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-4);
+}
+
+.imageOverlayContent {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .header,
+  .body,
+  .footer {
+    padding: var(--space-4);
+  }
+  
+  .headerCompact,
+  .bodyCompact,
+  .footerCompact {
+    padding: var(--space-3);
+  }
+}

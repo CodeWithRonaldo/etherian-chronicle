@@ -1,0 +1,180 @@
+.progressContainer {
+  width: 100%;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--gray-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .progressBar {
+  background-color: var(--gray-700);
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--primary-500);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow);
+  position: relative;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* Sizes */
+.small {
+  height: 4px;
+}
+
+.large {
+  height: 12px;
+}
+
+.xlarge {
+  height: 16px;
+}
+
+/* Variants */
+.success .progressFill {
+  background-color: var(--success-500);
+}
+
+.warning .progressFill {
+  background-color: var(--warning-500);
+}
+
+.error .progressFill {
+  background-color: var(--error-500);
+}
+
+.secondary .progressFill {
+  background-color: var(--secondary-500);
+}
+
+/* Label */
+.label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.percentage {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+/* Striped */
+.striped .progressFill {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+}
+
+.animated .progressFill {
+  animation: stripeAnimation 1s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes stripeAnimation {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1rem 0;
+  }
+}
+
+/* Circular progress */
+.circular {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circularSvg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.circularBackground {
+  fill: none;
+  stroke: var(--gray-200);
+  stroke-width: 8;
+}
+
+[data-theme="dark"] .circularBackground {
+  stroke: var(--gray-700);
+}
+
+.circularProgress {
+  fill: none;
+  stroke: var(--primary-500);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--transition-slow);
+}
+
+.circularText {
+  position: absolute;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.circularSmall {
+  width: 60px;
+  height: 60px;
+}
+
+.circularSmall .circularText {
+  font-size: var(--font-size-sm);
+}
+
+.circularLarge {
+  width: 160px;
+  height: 160px;
+}
+
+.circularLarge .circularText {
+  font-size: var(--font-size-xl);
+}
