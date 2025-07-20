@@ -1,0 +1,137 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Sizes */
+.small {
+  padding: 2px var(--space-1);
+  font-size: 10px;
+}
+
+.large {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+
+/* Variants */
+.primary {
+  background-color: var(--primary-100);
+  color: var(--primary-800);
+}
+
+[data-theme="dark"] .primary {
+  background-color: var(--primary-900);
+  color: var(--primary-200);
+}
+
+.secondary {
+  background-color: var(--secondary-100);
+  color: var(--secondary-800);
+}
+
+[data-theme="dark"] .secondary {
+  background-color: var(--secondary-900);
+  color: var(--secondary-200);
+}
+
+.success {
+  background-color: var(--success-100);
+  color: var(--success-800);
+}
+
+[data-theme="dark"] .success {
+  background-color: var(--success-900);
+  color: var(--success-200);
+}
+
+.warning {
+  background-color: var(--warning-100);
+  color: var(--warning-800);
+}
+
+[data-theme="dark"] .warning {
+  background-color: var(--warning-900);
+  color: var(--warning-200);
+}
+
+.error {
+  background-color: var(--error-100);
+  color: var(--error-800);
+}
+
+[data-theme="dark"] .error {
+  background-color: var(--error-900);
+  color: var(--error-200);
+}
+
+.neutral {
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+}
+
+[data-theme="dark"] .neutral {
+  background-color: var(--gray-800);
+  color: var(--gray-300);
+}
+
+/* Dot variant */
+.dot {
+  padding-left: var(--space-3);
+  position: relative;
+}
+
+.dot::before {
+  content: '';
+  position: absolute;
+  left: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Outline variant */
+.outline {
+  background-color: transparent;
+  border: 1px solid currentColor;
+}
+
+.outline.primary {
+  color: var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+.outline.secondary {
+  color: var(--secondary-500);
+  border-color: var(--secondary-500);
+}
+
+.outline.success {
+  color: var(--success-500);
+  border-color: var(--success-500);
+}
+
+.outline.warning {
+  color: var(--warning-500);
+  border-color: var(--warning-500);
+}
+
+.outline.error {
+  color: var(--error-500);
+  border-color: var(--error-500);
+}
+
+.outline.neutral {
+  color: var(--gray-500);
+  border-color: var(--gray-500);
+}
