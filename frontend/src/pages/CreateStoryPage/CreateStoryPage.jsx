@@ -188,20 +188,12 @@ const CreateStoryPage = () => {
     if (!validateStep(currentStep) || !formData) return;
     setIsSubmitting(true);
     try {
-      console.log("uploading image");
-
       const imageUrl = await pinata.upload.public.file(formData.coverImage);
-
-      console.log("finish... uploading file");
 
       const content = await pinata.upload.public.json({
         contentTitle: formData?.firstChapterTitle,
         content: formData?.firstChapterContent,
       });
-
-      console.log("finish uploading file ..... uploding to smartcontract");
-
-      console.log(formData);
 
       const storyDetails = [
         formData.title,
@@ -213,8 +205,6 @@ const CreateStoryPage = () => {
         formData.voteDuration,
       ];
 
-      console.log(storyDetails);
-
       await createStoryProposal(storyDetails);
 
       console.log("done uploading to smart");
@@ -223,7 +213,6 @@ const CreateStoryPage = () => {
       setIsSubmitted(true);
     } catch (error) {
       console.log(error);
-
       showError("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);

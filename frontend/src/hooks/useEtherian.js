@@ -1,13 +1,15 @@
-import {
-  prepareContractCall,
-  sendTransaction,
-  getContractEvents,
-} from "thirdweb";
+import { prepareContractCall, readContract, sendTransaction } from "thirdweb";
 import { contract } from "../clients/thirdWebClient";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
 
 export default function useEtherian() {
   const account = useActiveAccount();
+
+  const { data, isLoading } = useReadContract({
+    contract,
+    method: "getTotalStories",
+    params: [],
+  });
 
   const createStoryProposal = async (storyDetails) => {
     if (!account) {
@@ -29,23 +31,26 @@ export default function useEtherian() {
     console.log(reciept);
   };
 
-  const storyProposed = async () => {
-    const storyProp = [];
-
-    const events = await getContractEvents({
-      contract,
-      eventName: "StoryProposed",
-    });
-
-    events.forEach((event) => {
-      storyProp.push(event);
-    });
-
-    return storyProp;
+  const getAllStories = async () => {
+    const stories = [];
+    if (!isLoading) {
+      const totalStories = data;
+      console.log("total stories:", totalStories);
+      for (let i = 0; i < totalStories; i++) {
+        const story = await readContract({
+          contract,
+          method: "stories",
+          params: [i],
+        });
+        console.log("story:", story);
+        stories.push(story);
+      }
+    }
+    return stories;
   };
 
   return {
     createStoryProposal,
-    storyProposed,
+    getAllStories,
   };
 }

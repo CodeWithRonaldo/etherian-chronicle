@@ -12,14 +12,12 @@ import { useStory } from "../../contexts/StoryContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { mockLeaderboard } from "../../mock-data/stories";
 import Avatar from "../../components/UI/Avatar/Avatar";
-import { useActiveAccount } from "thirdweb/react";
 import useEtherian from "../../hooks/useEtherian";
 
 const HomePage = () => {
   const { stories, proposals, loading } = useStory();
   const { user } = useAuth();
-  const account = useActiveAccount();
-  const { storyProposed } = useEtherian();
+  const { getAllStories } = useEtherian();
 
   const featuredStories = stories.slice(0, 5);
   const recentProposals = proposals.slice(0, 6);
@@ -27,12 +25,11 @@ const HomePage = () => {
 
   useEffect(() => {
     const laka = async () => {
-      console.log(account);
-      const lakaka = await storyProposed();
+      const lakaka = await getAllStories();
       console.log(lakaka);
     };
     laka();
-  }, [account, storyProposed]);
+  }, [getAllStories]);
 
   if (loading) {
     return <PageContainer loading={true} />;
