@@ -6,19 +6,24 @@ import {
 import { contract } from "../clients/thirdWebClient";
 import { useActiveAccount } from "thirdweb/react";
 
-export function useEtherian() {
+export default function useEtherian() {
   const account = useActiveAccount();
 
   const createStoryProposal = async (storyDetails) => {
-    const transaction = prepareContractCall({
+    if (!account) {
+      console.log("you must connect wallet");
+      return;
+    }
+
+    const tx = prepareContractCall({
       contract,
       method: "createStoryProposal",
-      param: storyDetails,
+      params: storyDetails,
     });
 
     const reciept = await sendTransaction({
-      transaction,
-      account,
+      transaction: tx,
+      account: account,
     });
 
     console.log(reciept);

@@ -22,6 +22,7 @@ const Header = () => {
     { name: "Stories", href: "/stories" },
     { name: "Proposals", href: "/proposals" },
     { name: "Community", href: "/community" },
+    { name: "Create Story", href: "/create" },
   ];
 
   useEffect(() => {
