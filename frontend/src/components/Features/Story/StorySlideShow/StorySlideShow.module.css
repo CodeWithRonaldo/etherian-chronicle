@@ -186,8 +186,8 @@
 }
 
 .indicator {
-  width: 2px;
-  height: 2px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.4);

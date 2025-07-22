@@ -1,65 +1,74 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PageContainer from '../../components/Layout/PageContainer/PageContainer';
-import Input from '../../components/UI/Input/Input';
-import TextArea from '../../components/UI/TextArea/TextArea';
-import Button from '../../components/UI/Button/Button';
-import Avatar from '../../components/UI/Avatar/Avatar';
-import { useStory } from '../../contexts/StoryContext';
-import { useNotification } from '../../contexts/NotificationContext';
-import styles from './CreateStoryPage.module.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PageContainer from "../../components/Layout/PageContainer/PageContainer";
+import Input from "../../components/UI/Input/Input";
+import TextArea from "../../components/UI/TextArea/TextArea";
+import Button from "../../components/UI/Button/Button";
+import Avatar from "../../components/UI/Avatar/Avatar";
+// import { useStory } from "../../contexts/StoryContext";
+import { useNotification } from "../../contexts/NotificationContext";
+import styles from "./CreateStoryPage.module.css";
+import { PinataSDK } from "pinata";
+import useEtherian from "../../hooks/useEtherian";
 
 const CreateStoryPage = () => {
   const navigate = useNavigate();
-  const { addStory, addProposal } = useStory();
   const { showSuccess, showError } = useNotification();
-  
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [dragOver, setDragOver] = useState(false);
+  const { createStoryProposal } = useEtherian();
 
   const [formData, setFormData] = useState({
-    title: '',
-    summary: '',
-    genre: 'fantasy',
-    coverImage: null,
-    coverImageUrl: '',
-    firstChapterTitle: '',
-    firstChapterContent: '',
-    choices: ['', ''],
+    title: "",
+    summary: "",
+    coverImageUrl: "",
+    firstChapterTitle: "",
+    firstChapterContent: "",
+    choices: ["", ""],
     collaborators: [],
-    tags: '',
+    voteDuration: 0,
   });
 
-  const [newCollaborator, setNewCollaborator] = useState('');
+  const [newCollaborator, setNewCollaborator] = useState("");
 
   const steps = [
-    { number: 1, label: 'Basic Info', completed: currentStep > 1 },
-    { number: 2, label: 'First Chapter', completed: currentStep > 2 },
-    { number: 3, label: 'Collaborators', completed: currentStep > 3 },
-    { number: 4, label: 'Review', completed: false }
+    { number: 1, label: "Basic Info", completed: currentStep > 1 },
+    { number: 2, label: "First Chapter", completed: currentStep > 2 },
+    { number: 3, label: "Collaborators", completed: currentStep > 3 },
+    { number: 4, label: "Review", completed: false },
   ];
 
-  const genres = [
-    'fantasy', 'sci-fi', 'mystery', 'romance', 'horror', 'drama', 'steampunk', 'adventure', 'others'
-  ];
+  // const genres = [
+  //   "fantasy",
+  //   "sci-fi",
+  //   "mystery",
+  //   "romance",
+  //   "horror",
+  //   "drama",
+  //   "steampunk",
+  //   "adventure",
+  //   "others",
+  // ];
 
   const validateStep = (step) => {
     const newErrors = {};
 
     switch (step) {
       case 1:
-        if (!formData.title.trim()) newErrors.title = 'Title is required';
-        if (!formData.summary.trim()) newErrors.summary = 'Summary is required';
-        if (!formData.genre) newErrors.genre = 'Genre is required';
+        if (!formData.title.trim()) newErrors.title = "Title is required";
+        if (!formData.summary.trim()) newErrors.summary = "Summary is required";
+        // if (!formData.genre) newErrors.genre = 'Genre is required';
         break;
       case 2:
-        if (!formData.firstChapterTitle.trim()) newErrors.firstChapterTitle = 'Chapter title is required';
-        if (!formData.firstChapterContent.trim()) newErrors.firstChapterContent = 'Chapter content is required';
-        if (formData.choices.filter(choice => choice.trim()).length < 2) {
-          newErrors.choices = 'At least 2 choices are required';
+        if (!formData.firstChapterTitle.trim())
+          newErrors.firstChapterTitle = "Chapter title is required";
+        if (!formData.firstChapterContent.trim())
+          newErrors.firstChapterContent = "Chapter content is required";
+        if (formData.choices.filter((choice) => choice.trim()).length < 2) {
+          newErrors.choices = "At least 2 choices are required";
         }
         break;
       case 3:
@@ -74,20 +83,25 @@ const CreateStoryPage = () => {
   };
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
+  const pinata = new PinataSDK({
+    pinataJwt: import.meta.env.VITE_PINATA_JWT,
+    pinataGateway: import.meta.env.VITE_PINATA_GATEWAY_URL,
+  });
+
   const handleImageUpload = (file) => {
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           coverImage: file,
-          coverImageUrl: e.target.result
+          coverImageUrl: e.target.result,
         }));
       };
       reader.readAsDataURL(file);
@@ -113,103 +127,104 @@ const CreateStoryPage = () => {
 
   const addChoice = () => {
     if (formData.choices.length < 5) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        choices: [...prev.choices, '']
+        choices: [...prev.choices, ""],
       }));
     }
   };
 
   const removeChoice = (index) => {
     if (formData.choices.length > 2) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        choices: prev.choices.filter((_, i) => i !== index)
+        choices: prev.choices.filter((_, i) => i !== index),
       }));
     }
   };
 
   const updateChoice = (index, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      choices: prev.choices.map((choice, i) => i === index ? value : choice)
+      choices: prev.choices.map((choice, i) => (i === index ? value : choice)),
     }));
   };
 
   const addCollaborator = () => {
-    if (newCollaborator.trim() && !formData.collaborators.some(c => c.username === newCollaborator.trim())) {
+    if (
+      newCollaborator.trim() &&
+      !formData.collaborators.includes(newCollaborator.trim().toLowerCase())
+    ) {
       // Mock collaborator data
-      const mockCollaborator = {
-        id: Date.now().toString(),
-        username: newCollaborator.trim(),
-        avatar: `https://images.pexels.com/photos/${Math.floor(Math.random() * 1000000)}/pexels-photo-${Math.floor(Math.random() * 1000000)}.jpeg?auto=compress&cs=tinysrgb&w=50&h=50&dpr=1`
-      };
-      
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        collaborators: [...prev.collaborators, mockCollaborator]
+        collaborators: [
+          ...prev.collaborators,
+          newCollaborator.trim().toLowerCase(),
+        ],
       }));
-      setNewCollaborator('');
+      setNewCollaborator("");
     }
   };
 
-  const removeCollaborator = (id) => {
-    setFormData(prev => ({
+  const removeCollaborator = (i) => {
+    setFormData((prev) => ({
       ...prev,
-      collaborators: prev.collaborators.filter(c => c.id !== id)
+      collaborators: prev.collaborators.filter((_, index) => index !== i),
     }));
   };
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, 4));
+      setCurrentStep((prev) => Math.min(prev + 1, 4));
     }
   };
 
   const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+    setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(currentStep)) return;
-
+    if (!validateStep(currentStep) || !formData) return;
     setIsSubmitting(true);
     try {
-      const submissionData = {
-        title: formData.title,
-        summary: formData.summary,
-        genre: formData.genre,
-        coverImage: formData.coverImageUrl || 'https://images.pexels.com/photos/1054218/pexels-photo-1054218.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&dpr=1',
-        firstChapter: {
-          title: formData.firstChapterTitle,
-          content: formData.firstChapterContent,
-          choices: formData.choices.filter(choice => choice.trim()).map((choice, index) => ({
-            id: `choice-${index + 1}`,
-            text: choice.trim()
-          }))
-        },
-        collaborators: formData.collaborators,
-        tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        creator: {
-          id: '1',
-          username: 'EtherScribe',
-          avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=50&h=50&dpr=1'
-        }
-      };
+      console.log("uploading image");
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const imageUrl = await pinata.upload.public.file(formData.coverImage);
 
-      addProposal({
-        ...submissionData,
-        votingDeadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-        votes: { yes: 0, no: 0 }
+      console.log("finish... uploading file");
+
+      const content = await pinata.upload.public.json({
+        contentTitle: formData?.firstChapterTitle,
+        content: formData?.firstChapterContent,
       });
-      showSuccess('Story proposal submitted successfully!');
 
+      console.log("finish uploading file ..... uploding to smartcontract");
+
+      console.log(formData);
+
+      const storyDetails = [
+        formData.title,
+        formData.summary,
+        `https://black-far-coyote-812.mypinata.cloud/ipfs/${imageUrl.cid}`,
+        `https://black-far-coyote-812.mypinata.cloud/ipfs/${content.cid}`,
+        formData.choices,
+        formData.collaborators,
+        formData.voteDuration,
+      ];
+
+      console.log(storyDetails);
+
+      await createStoryProposal(storyDetails);
+
+      console.log("done uploading to smart");
+
+      showSuccess("Story proposal submitted successfully!");
       setIsSubmitted(true);
     } catch (error) {
-      showError('Failed to submit. Please try again.');
+      console.log(error);
+
+      showError("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -221,36 +236,48 @@ const CreateStoryPage = () => {
         <div className={styles.container}>
           <div className={styles.successMessage}>
             <h2 className={styles.successTitle}>
-              <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
-             Proposal Submitted!
+              Proposal Submitted!
             </h2>
             <p className={styles.successText}>
-             Your story proposal has been submitted and is now open for community voting. You'll be notified when the voting period ends.
+              Your story proposal has been submitted and is now open for
+              community voting. You'll be notified when the voting period ends.
             </p>
-            <div style={{ display: 'flex', gap: 'var(--space-3)', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Button 
-               onClick={() => navigate('/proposals')}
-                variant="primary"
-              >
-               View Proposals
+            <div
+              style={{
+                display: "flex",
+                gap: "var(--space-3)",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <Button onClick={() => navigate("/proposals")} variant="primary">
+                View Proposals
               </Button>
-              <Button 
+              <Button
                 onClick={() => {
                   setIsSubmitted(false);
                   setCurrentStep(1);
                   setFormData({
-                    title: '',
-                    summary: '',
-                    genre: 'fantasy',
-                    coverImage: null,
-                    coverImageUrl: '',
-                    firstChapterTitle: '',
-                    firstChapterContent: '',
-                    choices: ['', ''],
+                    title: "",
+                    summary: "",
+                    converImage: null,
+                    coverImageUrl: "",
+                    firstChapterContent: "",
+                    choices: ["", ""],
                     collaborators: [],
-                    tags: '',
+                    voteDuration: 0,
                   });
                 }}
                 variant="secondary"
@@ -270,7 +297,8 @@ const CreateStoryPage = () => {
         <header className={styles.header}>
           <h1 className={styles.title}>Create New Story</h1>
           <p className={styles.subtitle}>
-            Share your creative vision with the community. Submit a proposal for voting or create a story directly.
+            Share your creative vision with the community. Submit a proposal for
+            voting or create a story directly.
           </p>
         </header>
 
@@ -278,21 +306,34 @@ const CreateStoryPage = () => {
           {/* Progress Steps */}
           <div className={styles.steps}>
             {steps.map((step, index) => (
-              <div 
+              <div
                 key={step.number}
-                className={`${styles.step} ${currentStep === step.number ? styles.active : ''} ${step.completed ? styles.completed : ''}`}
+                className={`${styles.step} ${
+                  currentStep === step.number ? styles.active : ""
+                } ${step.completed ? styles.completed : ""}`}
               >
                 <div className={styles.stepNumber}>
                   {step.completed ? (
-                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   ) : (
                     step.number
                   )}
                 </div>
                 <div className={styles.stepLabel}>{step.label}</div>
-                {index < steps.length - 1 && <div className={styles.stepConnector} />}
+                {index < steps.length - 1 && (
+                  <div className={styles.stepConnector} />
+                )}
               </div>
             ))}
           </div>
@@ -300,8 +341,17 @@ const CreateStoryPage = () => {
           {/* Error Messages */}
           {Object.keys(errors).length > 0 && (
             <div className={styles.errorMessage}>
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
               </svg>
               Please fix the errors below to continue.
             </div>
@@ -313,7 +363,8 @@ const CreateStoryPage = () => {
               <>
                 <h2 className={styles.stepTitle}>Basic Information</h2>
                 <p className={styles.stepDescription}>
-                  Let's start with the basics. Give your story a compelling title and summary that will attract readers.
+                  Let's start with the basics. Give your story a compelling
+                  title and summary that will attract readers.
                 </p>
 
                 <div className={styles.formGroup}>
@@ -321,7 +372,7 @@ const CreateStoryPage = () => {
                     label="Story Title"
                     placeholder="Enter a captivating title for your story"
                     value={formData.title}
-                    onChange={(e) => handleInputChange('title', e.target.value)}
+                    onChange={(e) => handleInputChange("title", e.target.value)}
                     error={errors.title}
                     required
                   />
@@ -332,14 +383,16 @@ const CreateStoryPage = () => {
                     label="Story Summary"
                     placeholder="Describe your story in a few compelling sentences. What makes it unique?"
                     value={formData.summary}
-                    onChange={(e) => handleInputChange('summary', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("summary", e.target.value)
+                    }
                     error={errors.summary}
                     rows={4}
                     required
                   />
                 </div>
 
-                <div className={styles.formRow}>
+                {/* <div className={styles.formRow}>
                   <div className={styles.formGroup}>
                     <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-secondary)' }}>
                       Genre <span style={{ color: 'var(--error-500)' }}>*</span>
@@ -370,36 +423,71 @@ const CreateStoryPage = () => {
                     )}
                   </div>
 
-                </div>
+                </div> */}
 
                 <div className={styles.formGroup}>
-                  <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-secondary)' }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "var(--space-2)",
+                      fontSize: "var(--font-size-sm)",
+                      fontWeight: "var(--font-weight-medium)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     Cover Image
                   </label>
-                  
+
                   {formData.coverImageUrl ? (
                     <div className={styles.imagePreview}>
-                      <img src={formData.coverImageUrl} alt="Cover preview" className={styles.previewImage} />
+                      <img
+                        src={formData.coverImageUrl}
+                        alt="Cover preview"
+                        className={styles.previewImage}
+                      />
                       <button
                         type="button"
                         className={styles.removeImage}
-                        onClick={() => handleInputChange('coverImageUrl', '')}
+                        onClick={() => handleInputChange("coverImageUrl", "")}
                       >
-                        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       </button>
                     </div>
                   ) : (
                     <div
-                      className={`${styles.imageUpload} ${dragOver ? styles.dragOver : ''}`}
+                      className={`${styles.imageUpload} ${
+                        dragOver ? styles.dragOver : ""
+                      }`}
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
                       onDragLeave={handleDragLeave}
-                      onClick={() => document.getElementById('coverImageInput').click()}
+                      onClick={() =>
+                        document.getElementById("coverImageInput").click()
+                      }
                     >
-                      <svg className={styles.imageUploadIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <svg
+                        className={styles.imageUploadIcon}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
                       </svg>
                       <div className={styles.imageUploadText}>
                         Click to upload or drag and drop
@@ -409,7 +497,7 @@ const CreateStoryPage = () => {
                       </div>
                     </div>
                   )}
-                  
+
                   <input
                     id="coverImageInput"
                     type="file"
@@ -419,15 +507,15 @@ const CreateStoryPage = () => {
                   />
                 </div>
 
-                <div className={styles.formGroup}>
+                {/* <div className={styles.formGroup}>
                   <Input
                     label="Tags (optional)"
                     placeholder="fantasy, magic, adventure (comma-separated)"
                     value={formData.tags}
-                    onChange={(e) => handleInputChange('tags', e.target.value)}
+                    onChange={(e) => handleInputChange("tags", e.target.value)}
                     helpText="Add tags to help readers discover your story"
                   />
-                </div>
+                </div> */}
               </>
             )}
 
@@ -435,7 +523,8 @@ const CreateStoryPage = () => {
               <>
                 <h2 className={styles.stepTitle}>First Chapter</h2>
                 <p className={styles.stepDescription}>
-                  Write the opening chapter of your story and provide choices for readers to vote on.
+                  Write the opening chapter of your story and provide choices
+                  for readers to vote on.
                 </p>
 
                 <div className={styles.formGroup}>
@@ -443,7 +532,9 @@ const CreateStoryPage = () => {
                     label="Chapter Title"
                     placeholder="Enter the title for your first chapter"
                     value={formData.firstChapterTitle}
-                    onChange={(e) => handleInputChange('firstChapterTitle', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("firstChapterTitle", e.target.value)
+                    }
                     error={errors.firstChapterTitle}
                     required
                   />
@@ -454,7 +545,9 @@ const CreateStoryPage = () => {
                     label="Chapter Content"
                     placeholder="Write your opening chapter here. Set the scene, introduce characters, and create an engaging hook that leads to the choices below."
                     value={formData.firstChapterContent}
-                    onChange={(e) => handleInputChange('firstChapterContent', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("firstChapterContent", e.target.value)
+                    }
                     error={errors.firstChapterContent}
                     rows={8}
                     required
@@ -462,10 +555,19 @@ const CreateStoryPage = () => {
                 </div>
 
                 <div className={styles.choicesSection}>
-                  <label style={{ display: 'block', marginBottom: 'var(--space-4)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-secondary)' }}>
-                    Reader Choices <span style={{ color: 'var(--error-500)' }}>*</span>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "var(--space-4)",
+                      fontSize: "var(--font-size-sm)",
+                      fontWeight: "var(--font-weight-medium)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    Reader Choices{" "}
+                    <span style={{ color: "var(--error-500)" }}>*</span>
                   </label>
-                  
+
                   <div className={styles.choicesList}>
                     {formData.choices.map((choice, index) => (
                       <div key={index} className={styles.choiceItem}>
@@ -483,8 +585,17 @@ const CreateStoryPage = () => {
                             className={styles.removeChoice}
                             onClick={() => removeChoice(index)}
                           >
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </button>
                         )}
@@ -498,15 +609,30 @@ const CreateStoryPage = () => {
                       className={styles.addChoice}
                       onClick={addChoice}
                     >
-                      <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       Add Another Choice
                     </button>
                   )}
 
                   {errors.choices && (
-                    <div style={{ marginTop: 'var(--space-2)', fontSize: 'var(--font-size-xs)', color: 'var(--error-500)' }}>
+                    <div
+                      style={{
+                        marginTop: "var(--space-2)",
+                        fontSize: "var(--font-size-xs)",
+                        color: "var(--error-500)",
+                      }}
+                    >
                       {errors.choices}
                     </div>
                   )}
@@ -518,32 +644,48 @@ const CreateStoryPage = () => {
               <>
                 <h2 className={styles.stepTitle}>Collaborators</h2>
                 <p className={styles.stepDescription}>
-                  Invite other writers to collaborate on your story. Collaborators can help write future chapters and shape the narrative.
+                  Invite other writers to collaborate on your story.
+                  Collaborators can help write future chapters and shape the
+                  narrative.
                 </p>
 
                 {formData.collaborators.length > 0 && (
                   <div className={styles.collaboratorsSection}>
-                    <label style={{ display: 'block', marginBottom: 'var(--space-3)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-secondary)' }}>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "var(--space-3)",
+                        fontSize: "var(--font-size-sm)",
+                        fontWeight: "var(--font-weight-medium)",
+                        color: "var(--text-secondary)",
+                      }}
+                    >
                       Current Collaborators
                     </label>
                     <div className={styles.collaboratorsList}>
-                      {formData.collaborators.map((collaborator) => (
-                        <div key={collaborator.id} className={styles.collaboratorItem}>
+                      {formData.collaborators.map((collaborator, i) => (
+                        <div key={i} className={styles.collaboratorItem}>
                           <div className={styles.collaboratorInfo}>
-                            <Avatar
-                              src={collaborator.avatar}
-                              alt={collaborator.username}
-                              size="medium"
-                            />
-                            <span className={styles.collaboratorName}>{collaborator.username}</span>
+                            <span className={styles.collaboratorName}>
+                              {collaborator}
+                            </span>
                           </div>
                           <button
                             type="button"
                             className={styles.removeCollaborator}
-                            onClick={() => removeCollaborator(collaborator.id)}
+                            onClick={() => removeCollaborator(i)}
                           >
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </button>
                         </div>
@@ -553,17 +695,25 @@ const CreateStoryPage = () => {
                 )}
 
                 <div className={styles.formGroup}>
-                  <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-secondary)' }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "var(--space-2)",
+                      fontSize: "var(--font-size-sm)",
+                      fontWeight: "var(--font-weight-medium)",
+                      color: "var(--text-secondary)",
+                    }}
+                  >
                     Add Collaborator
                   </label>
                   <div className={styles.addCollaborator}>
                     <Input
-                      placeholder="Enter username to invite"
+                      placeholder="Enter collaborator's wallet Address"
                       value={newCollaborator}
                       onChange={(e) => setNewCollaborator(e.target.value)}
                       className={styles.collaboratorInput}
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
+                        if (e.key === "Enter") {
                           e.preventDefault();
                           addCollaborator();
                         }
@@ -578,6 +728,16 @@ const CreateStoryPage = () => {
                     </Button>
                   </div>
                 </div>
+                <Input
+                  label="Vote Duration (in seconds)"
+                  type="number"
+                  value={formData.voteDuration}
+                  onChange={(e) =>
+                    handleInputChange("voteDuration", BigInt(e.target.value))
+                  }
+                  error={errors.voteDuration}
+                  required
+                />
               </>
             )}
 
@@ -585,47 +745,71 @@ const CreateStoryPage = () => {
               <>
                 <h2 className={styles.stepTitle}>Review & Submit</h2>
                 <p className={styles.stepDescription}>
-                  Review your story details before submitting. Once submitted, your {formData.submissionType} will be {formData.submissionType === 'proposal' ? 'open for community voting' : 'immediately available to readers'}.
+                  Review your story details before submitting. Once submitted,
+                  your {formData.submissionType} will be{" "}
+                  {formData.submissionType === "proposal"
+                    ? "open for community voting"
+                    : "immediately available to readers"}
+                  .
                 </p>
 
                 <div className={styles.summary}>
                   <h3 className={styles.summaryTitle}>Story Summary</h3>
-                  
+
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>Title:</span>
-                    <span className={styles.summaryValue}>{formData.title}</span>
+                    <span className={styles.summaryValue}>
+                      {formData.title}
+                    </span>
                   </div>
-                  
-                  <div className={styles.summaryItem}>
+
+                  {/* <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>Genre:</span>
-                    <span className={styles.summaryValue}>{formData.genre}</span>
-                  </div>
-                  
+                    <span className={styles.summaryValue}>
+                      {formData.genre}
+                    </span>
+                  </div> */}
+
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>First Chapter:</span>
-                    <span className={styles.summaryValue}>{formData.firstChapterTitle}</span>
+                    <span className={styles.summaryValue}>
+                      {formData.firstChapterTitle}
+                    </span>
                   </div>
-                  
+
+                  <div className={styles.summaryItem}>
+                    <span className={styles.summaryLabel}>Summary</span>
+                    <span className={styles.summaryValue}>
+                      {formData.summary}
+                    </span>
+                  </div>
+
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>Choices:</span>
                     <span className={styles.summaryValue}>
-                      {formData.choices.filter(choice => choice.trim()).length} options
+                      {
+                        formData.choices.filter((choice) => choice.trim())
+                          .length
+                      }{" "}
+                      options
                     </span>
                   </div>
-                  
+
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>Collaborators:</span>
                     <span className={styles.summaryValue}>
                       {formData.collaborators.length} invited
                     </span>
                   </div>
-                  
-                  {formData.tags && (
+
+                  {/* {formData.tags && (
                     <div className={styles.summaryItem}>
                       <span className={styles.summaryLabel}>Tags:</span>
-                      <span className={styles.summaryValue}>{formData.tags}</span>
+                      <span className={styles.summaryValue}>
+                        {formData.tags}
+                      </span>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </>
             )}
@@ -657,7 +841,7 @@ const CreateStoryPage = () => {
                 loading={isSubmitting}
                 className={styles.actionButton}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Proposal'}
+                {isSubmitting ? "Submitting..." : "Submit Proposal"}
               </Button>
             )}
           </div>
