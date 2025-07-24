@@ -1,95 +1,219 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
-  { "inputs": [], "name": "AlreadyVoted", "type": "error" },
-  { "inputs": [], "name": "CannotAddChapterToNonActiveStory", "type": "error" },
-  { "inputs": [], "name": "ChapterCannotBeAddedToLiveVote", "type": "error" },
-  { "inputs": [], "name": "ChapterNotFound", "type": "error" },
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AlreadyVoted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CannotAddChapterToNonActiveStory",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ChapterCannotBeAddedToLiveVote",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ChapterNotFound",
+    "type": "error"
+  },
   {
     "inputs": [
-      { "internalType": "address", "name": "sender", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "address", "name": "owner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
     ],
     "name": "ERC721IncorrectOwner",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "operator", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "ERC721InsufficientApproval",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "approver", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "approver",
+        "type": "address"
+      }
     ],
     "name": "ERC721InvalidApprover",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "operator", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      }
     ],
     "name": "ERC721InvalidOperator",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "owner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
     ],
     "name": "ERC721InvalidOwner",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "receiver", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      }
     ],
     "name": "ERC721InvalidReceiver",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "sender", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      }
     ],
     "name": "ERC721InvalidSender",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "ERC721NonexistentToken",
     "type": "error"
   },
-  { "inputs": [], "name": "InvalidChapterStatus", "type": "error" },
-  { "inputs": [], "name": "InvalidChoice", "type": "error" },
-  { "inputs": [], "name": "InvalidPreviousChapterIndex", "type": "error" },
-  { "inputs": [], "name": "InvalidStoryStatus", "type": "error" },
-  { "inputs": [], "name": "NotStoryCollaborator", "type": "error" },
-  { "inputs": [], "name": "NotStoryOwner", "type": "error" },
+  {
+    "inputs": [],
+    "name": "InvalidChapterStatus",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidChoice",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPreviousChapterIndex",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidStoryStatus",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotStoryCollaborator",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotStoryOwner",
+    "type": "error"
+  },
   {
     "inputs": [
-      { "internalType": "address", "name": "owner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
     ],
     "name": "OwnableInvalidOwner",
     "type": "error"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
     ],
     "name": "OwnableUnauthorizedAccount",
     "type": "error"
   },
-  { "inputs": [], "name": "PreviousChapterNotResolved", "type": "error" },
-  { "inputs": [], "name": "ProposalAlreadyVoted", "type": "error" },
-  { "inputs": [], "name": "ProposalVotePeriodNotOver", "type": "error" },
-  { "inputs": [], "name": "ReentrancyGuardReentrantCall", "type": "error" },
-  { "inputs": [], "name": "StoryNotFound", "type": "error" },
-  { "inputs": [], "name": "VotingPeriodNotOver", "type": "error" },
-  { "inputs": [], "name": "VotingPeriodNotStarted", "type": "error" },
+  {
+    "inputs": [],
+    "name": "PreviousChapterNotResolved",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ProposalAlreadyVoted",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ProposalVotePeriodNotOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ReentrancyGuardReentrantCall",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "StoryNotFound",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "VotingPeriodNotOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "VotingPeriodNotStarted",
+    "type": "error"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -449,7 +573,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "_previousChapterIndex",
@@ -460,9 +588,21 @@
         "name": "_previousChapterWinningChoiceIndex",
         "type": "uint256"
       },
-      { "internalType": "string", "name": "_ipfsHash", "type": "string" },
-      { "internalType": "string[]", "name": "_choices", "type": "string[]" },
-      { "internalType": "uint256", "name": "_voteDuration", "type": "uint256" }
+      {
+        "internalType": "string",
+        "name": "_ipfsHash",
+        "type": "string"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_choices",
+        "type": "string[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_voteDuration",
+        "type": "uint256"
+      }
     ],
     "name": "addChapter",
     "outputs": [],
@@ -471,7 +611,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
       {
         "internalType": "address",
         "name": "_collaboratorAddress",
@@ -485,8 +629,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "approve",
     "outputs": [],
@@ -495,28 +647,64 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "owner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
     ],
     "name": "balanceOf",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
-      { "internalType": "address", "name": "_addr", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_addr",
+        "type": "address"
+      }
     ],
     "name": "checkIsCollaborator",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "string", "name": "_title", "type": "string" },
-      { "internalType": "string", "name": "_summary", "type": "string" },
-      { "internalType": "string", "name": "_ipfsHashImage", "type": "string" },
+      {
+        "internalType": "string",
+        "name": "_title",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_summary",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_ipfsHashImage",
+        "type": "string"
+      },
       {
         "internalType": "string",
         "name": "_ipfsHashChapter1Content",
@@ -545,26 +733,60 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "getApproved",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_chapterIndex", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterIndex",
+        "type": "uint256"
+      }
     ],
     "name": "getChapter",
     "outputs": [
-      { "internalType": "uint256", "name": "chapterId", "type": "uint256" },
-      { "internalType": "string", "name": "ipfsHash", "type": "string" },
+      {
+        "internalType": "uint256",
+        "name": "chapterId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "ipfsHash",
+        "type": "string"
+      },
       {
         "components": [
-          { "internalType": "string", "name": "text", "type": "string" },
-          { "internalType": "uint256", "name": "voteCount", "type": "uint256" },
+          {
+            "internalType": "string",
+            "name": "text",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "voteCount",
+            "type": "uint256"
+          },
           {
             "internalType": "uint256",
             "name": "nextChapterIndex",
@@ -575,46 +797,407 @@
         "name": "choices",
         "type": "tuple[]"
       },
-      { "internalType": "uint256", "name": "voteEndTime", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "voteEndTime",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "winningChoiceIndex",
         "type": "uint256"
       },
-      { "internalType": "bool", "name": "isResolved", "type": "bool" },
-      { "internalType": "uint256", "name": "voteCountSum", "type": "uint256" }
+      {
+        "internalType": "bool",
+        "name": "isResolved",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "voteCountSum",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getChapterBasicInfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "chapterId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "ipfsHash",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "voteEndTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "winningChoiceIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isResolved",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "voteCountSum",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalChoices",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "getChapterChoices",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "text",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "voteCount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nextChapterIndex",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct EtherianChronicle.Choice[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
     ],
     "name": "getCurrentChapterIndex",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_startIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_count",
+        "type": "uint256"
+      }
+    ],
+    "name": "getMultipleStoriesBasicInfo",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "storyIds",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "titles",
+        "type": "string[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "writers",
+        "type": "address[]"
+      },
+      {
+        "internalType": "enum EtherianChronicle.StoryStatus[]",
+        "name": "statuses",
+        "type": "uint8[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getProposalInfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "proposalVoteEndTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "proposalYesVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "proposalNoVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isVotingActive",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
     ],
     "name": "getProposalVoteCounts",
     "outputs": [
-      { "internalType": "uint256", "name": "yesVotes", "type": "uint256" },
-      { "internalType": "uint256", "name": "noVotes", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "yesVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "noVotes",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getStoryBasicInfo",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "summary",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "writer",
+        "type": "address"
+      },
+      {
+        "internalType": "enum EtherianChronicle.StoryStatus",
+        "name": "status",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalChapters",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
     ],
     "name": "getStoryCollaborators",
     "outputs": [
-      { "internalType": "address[]", "name": "", "type": "address[]" }
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getStoryDetails",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "writer",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "summary",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "ipfsHashImage",
+        "type": "string"
+      },
+      {
+        "internalType": "address[]",
+        "name": "collaborators",
+        "type": "address[]"
+      },
+      {
+        "internalType": "enum EtherianChronicle.StoryStatus",
+        "name": "status",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "proposalVoteEndTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "proposalYesVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "proposalNoVotes",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentChapterIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalChapters",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getStoryStatus",
+    "outputs": [
+      {
+        "internalType": "enum EtherianChronicle.StoryStatus",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTotalChapters",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -622,47 +1205,163 @@
   {
     "inputs": [],
     "name": "getTotalStories",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_chapterIndex", "type": "uint256" },
-      { "internalType": "address", "name": "_voter", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_voter",
+        "type": "address"
+      }
+    ],
+    "name": "getUserProposalVote",
+    "outputs": [
+      {
+        "internalType": "enum EtherianChronicle.ProposalVoteType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_voter",
+        "type": "address"
+      }
     ],
     "name": "hasVotedOnChapter",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
-      { "internalType": "address", "name": "_voter", "type": "address" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_voter",
+        "type": "address"
+      }
     ],
     "name": "hasVotedOnProposal",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "owner", "type": "address" },
-      { "internalType": "address", "name": "operator", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      }
     ],
     "name": "isApprovedForAll",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_recipient", "type": "address" },
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_chapterId", "type": "uint256" },
-      { "internalType": "string", "name": "_tokenURI", "type": "string" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "isChapterVotingActive",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_tokenURI",
+        "type": "string"
+      }
     ],
     "name": "mintLoreFragment",
     "outputs": [],
@@ -672,23 +1371,45 @@
   {
     "inputs": [],
     "name": "name",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "ownerOf",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -701,8 +1422,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_chapterIndex", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterIndex",
+        "type": "uint256"
+      }
     ],
     "name": "resolveChapter",
     "outputs": [],
@@ -711,7 +1440,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      }
     ],
     "name": "resolveProposal",
     "outputs": [],
@@ -720,9 +1453,21 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "from", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "safeTransferFrom",
     "outputs": [],
@@ -731,10 +1476,26 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "from", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "bytes", "name": "data", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
     "name": "safeTransferFrom",
     "outputs": [],
@@ -743,8 +1504,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "operator", "type": "address" },
-      { "internalType": "bool", "name": "approved", "type": "bool" }
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+      }
     ],
     "name": "setApprovalForAll",
     "outputs": [],
@@ -752,18 +1521,40 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "stories",
     "outputs": [
-      { "internalType": "uint256", "name": "storyId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "storyId",
+        "type": "uint256"
+      },
       {
         "internalType": "address payable",
         "name": "writer",
         "type": "address"
       },
-      { "internalType": "string", "name": "title", "type": "string" },
-      { "internalType": "string", "name": "summary", "type": "string" },
-      { "internalType": "string", "name": "ipfsHashImage", "type": "string" },
+      {
+        "internalType": "string",
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "summary",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "ipfsHashImage",
+        "type": "string"
+      },
       {
         "internalType": "enum EtherianChronicle.StoryStatus",
         "name": "status",
@@ -794,42 +1585,92 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "storyIdToCurrentChapterIndex",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
     ],
     "name": "supportsInterface",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "symbol",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "tokenURI",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "from", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "transferFrom",
     "outputs": [],
@@ -838,7 +1679,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -847,9 +1692,21 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_chapterIndex", "type": "uint256" },
-      { "internalType": "uint256", "name": "_choiceIndex", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chapterIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_choiceIndex",
+        "type": "uint256"
+      }
     ],
     "name": "voteOnChapter",
     "outputs": [],
@@ -858,7 +1715,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "_storyId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_storyId",
+        "type": "uint256"
+      },
       {
         "internalType": "enum EtherianChronicle.ProposalVoteType",
         "name": "_voteType",

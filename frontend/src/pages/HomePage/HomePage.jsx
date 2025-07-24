@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import StorySlideshow from "../../components/Features/Story/StorySlideshow/StorySlideshow";
@@ -9,30 +9,17 @@ import Card from "../../components/UI/Card/Card";
 import Badge from "../../components/UI/Badge/Badge";
 import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 import { useStory } from "../../contexts/StoryContext";
-import { useAuth } from "../../contexts/AuthContext";
 import { mockLeaderboard } from "../../mock-data/stories";
 import Avatar from "../../components/UI/Avatar/Avatar";
-import { useActiveAccount } from "thirdweb/react";
-import useEtherian from "../../hooks/useEtherian";
+import { userData } from "../../contexts/storyData";
 
 const HomePage = () => {
   const { stories, proposals, loading } = useStory();
-  const { user } = useAuth();
-  const account = useActiveAccount();
-  const { storyProposed } = useEtherian();
+  const { allStories, isLoading } = useContext(userData);
 
   const featuredStories = stories.slice(0, 5);
   const recentProposals = proposals.slice(0, 6);
   const topCommunityMembers = mockLeaderboard.slice(0, 5);
-
-  useEffect(() => {
-    const laka = async () => {
-      console.log(account);
-      const lakaka = await storyProposed();
-      console.log(lakaka);
-    };
-    laka();
-  }, [account, storyProposed]);
 
   if (loading) {
     return <PageContainer loading={true} />;

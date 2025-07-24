@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import Input from "../../components/UI/Input/Input";
 import TextArea from "../../components/UI/TextArea/TextArea";
 import Button from "../../components/UI/Button/Button";
-import Avatar from "../../components/UI/Avatar/Avatar";
-// import { useStory } from "../../contexts/StoryContext";
 import { useNotification } from "../../contexts/NotificationContext";
 import styles from "./CreateStoryPage.module.css";
 import { PinataSDK } from "pinata";
-import useEtherian from "../../hooks/useEtherian";
+import { userData } from "../../contexts/storyData";
 
 const CreateStoryPage = () => {
   const navigate = useNavigate();
@@ -19,17 +17,19 @@ const CreateStoryPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [dragOver, setDragOver] = useState(false);
-  const { createStoryProposal } = useEtherian();
+  const { createStoryProposal } = useContext(userData);
 
   const [formData, setFormData] = useState({
     title: "",
     summary: "",
+    coverImage: null,
     coverImageUrl: "",
+    genre: "",
     firstChapterTitle: "",
     firstChapterContent: "",
     choices: ["", ""],
     collaborators: [],
-    voteDuration: 0,
+    tags: "",
   });
 
   const [newCollaborator, setNewCollaborator] = useState("");
@@ -41,17 +41,17 @@ const CreateStoryPage = () => {
     { number: 4, label: "Review", completed: false },
   ];
 
-  // const genres = [
-  //   "fantasy",
-  //   "sci-fi",
-  //   "mystery",
-  //   "romance",
-  //   "horror",
-  //   "drama",
-  //   "steampunk",
-  //   "adventure",
-  //   "others",
-  // ];
+  const genres = [
+    "fantasy",
+    "sci-fi",
+    "mystery",
+    "romance",
+    "horror",
+    "drama",
+    "steampunk",
+    "adventure",
+    "others",
+  ];
 
   const validateStep = (step) => {
     const newErrors = {};
@@ -60,7 +60,10 @@ const CreateStoryPage = () => {
       case 1:
         if (!formData.title.trim()) newErrors.title = "Title is required";
         if (!formData.summary.trim()) newErrors.summary = "Summary is required";
-        // if (!formData.genre) newErrors.genre = 'Genre is required';
+        if (!formData.genre) newErrors.genre = "Genre is required";
+        if (!formData.coverImage)
+          newErrors.coverImage = "Cover Image is required";
+        if (!formData.tags) newErrors.tags = "Add at least a tag";
         break;
       case 2:
         if (!formData.firstChapterTitle.trim())
@@ -155,7 +158,6 @@ const CreateStoryPage = () => {
       newCollaborator.trim() &&
       !formData.collaborators.includes(newCollaborator.trim().toLowerCase())
     ) {
-      // Mock collaborator data
       setFormData((prev) => ({
         ...prev,
         collaborators: [
@@ -188,20 +190,14 @@ const CreateStoryPage = () => {
     if (!validateStep(currentStep) || !formData) return;
     setIsSubmitting(true);
     try {
-      console.log("uploading image");
-
       const imageUrl = await pinata.upload.public.file(formData.coverImage);
-
-      console.log("finish... uploading file");
 
       const content = await pinata.upload.public.json({
         contentTitle: formData?.firstChapterTitle,
         content: formData?.firstChapterContent,
+        genre: formData?.genre,
+        tags: formData?.tags.split(", "),
       });
-
-      console.log("finish uploading file ..... uploding to smartcontract");
-
-      console.log(formData);
 
       const storyDetails = [
         formData.title,
@@ -210,7 +206,7 @@ const CreateStoryPage = () => {
         `https://black-far-coyote-812.mypinata.cloud/ipfs/${content.cid}`,
         formData.choices,
         formData.collaborators,
-        formData.voteDuration,
+        86400n,
       ];
 
       console.log(storyDetails);
@@ -223,7 +219,6 @@ const CreateStoryPage = () => {
       setIsSubmitted(true);
     } catch (error) {
       console.log(error);
-
       showError("Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -277,7 +272,7 @@ const CreateStoryPage = () => {
                     firstChapterContent: "",
                     choices: ["", ""],
                     collaborators: [],
-                    voteDuration: 0,
+                    tags: "",
                   });
                 }}
                 variant="secondary"
@@ -392,38 +387,57 @@ const CreateStoryPage = () => {
                   />
                 </div>
 
-                {/* <div className={styles.formRow}>
+                <div className={styles.formRow}>
                   <div className={styles.formGroup}>
-                    <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontSize: 'var(--font-size-sm)', fontWeight: 'var(--font-weight-medium)', color: 'var(--text-secondary)' }}>
-                      Genre <span style={{ color: 'var(--error-500)' }}>*</span>
+                    <label
+                      style={{
+                        display: "block",
+                        marginBottom: "var(--space-2)",
+                        fontSize: "var(--font-size-sm)",
+                        fontWeight: "var(--font-weight-medium)",
+                        color: "var(--text-secondary)",
+                      }}
+                    >
+                      Genre <span style={{ color: "var(--error-500)" }}>*</span>
                     </label>
                     <select
                       value={formData.genre}
-                      onChange={(e) => handleInputChange('genre', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("genre", e.target.value)
+                      }
                       style={{
-                        width: '100%',
-                        padding: 'var(--space-3) var(--space-4)',
-                        border: `1px solid ${errors.genre ? 'var(--error-500)' : 'var(--border-primary)'}`,
-                        borderRadius: 'var(--radius-lg)',
-                        backgroundColor: 'var(--bg-secondary)',
-                        color: 'var(--text-primary)',
-                        fontSize: 'var(--font-size-base)'
+                        width: "100%",
+                        padding: "var(--space-3) var(--space-4)",
+                        border: `1px solid ${
+                          errors.genre
+                            ? "var(--error-500)"
+                            : "var(--border-primary)"
+                        }`,
+                        borderRadius: "var(--radius-lg)",
+                        backgroundColor: "var(--bg-secondary)",
+                        color: "var(--text-primary)",
+                        fontSize: "var(--font-size-base)",
                       }}
                     >
-                      {genres.map(genre => (
+                      {genres.map((genre) => (
                         <option key={genre} value={genre}>
                           {genre.charAt(0).toUpperCase() + genre.slice(1)}
                         </option>
                       ))}
                     </select>
                     {errors.genre && (
-                      <div style={{ marginTop: 'var(--space-1)', fontSize: 'var(--font-size-xs)', color: 'var(--error-500)' }}>
+                      <div
+                        style={{
+                          marginTop: "var(--space-1)",
+                          fontSize: "var(--font-size-xs)",
+                          color: "var(--error-500)",
+                        }}
+                      >
                         {errors.genre}
                       </div>
                     )}
                   </div>
-
-                </div> */}
+                </div>
 
                 <div className={styles.formGroup}>
                   <label
@@ -507,15 +521,16 @@ const CreateStoryPage = () => {
                   />
                 </div>
 
-                {/* <div className={styles.formGroup}>
+                <div className={styles.formGroup}>
                   <Input
-                    label="Tags (optional)"
+                    label="Tags"
                     placeholder="fantasy, magic, adventure (comma-separated)"
                     value={formData.tags}
                     onChange={(e) => handleInputChange("tags", e.target.value)}
                     helpText="Add tags to help readers discover your story"
+                    error={errors.tags}
                   />
-                </div> */}
+                </div>
               </>
             )}
 
@@ -728,7 +743,7 @@ const CreateStoryPage = () => {
                     </Button>
                   </div>
                 </div>
-                <Input
+                {/* <Input
                   label="Vote Duration (in seconds)"
                   type="number"
                   value={formData.voteDuration}
@@ -737,7 +752,7 @@ const CreateStoryPage = () => {
                   }
                   error={errors.voteDuration}
                   required
-                />
+                /> */}
               </>
             )}
 
@@ -763,12 +778,12 @@ const CreateStoryPage = () => {
                     </span>
                   </div>
 
-                  {/* <div className={styles.summaryItem}>
+                  <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>Genre:</span>
                     <span className={styles.summaryValue}>
                       {formData.genre}
                     </span>
-                  </div> */}
+                  </div>
 
                   <div className={styles.summaryItem}>
                     <span className={styles.summaryLabel}>First Chapter:</span>
@@ -802,14 +817,14 @@ const CreateStoryPage = () => {
                     </span>
                   </div>
 
-                  {/* {formData.tags && (
+                  {formData.tags && (
                     <div className={styles.summaryItem}>
                       <span className={styles.summaryLabel}>Tags:</span>
                       <span className={styles.summaryValue}>
                         {formData.tags}
                       </span>
                     </div>
-                  )} */}
+                  )}
                 </div>
               </>
             )}

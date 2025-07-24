@@ -1,13 +1,16 @@
-import {
-  prepareContractCall,
-  sendTransaction,
-  getContractEvents,
-} from "thirdweb";
+import { prepareContractCall, readContract, sendTransaction } from "thirdweb";
 import { contract } from "../clients/thirdWebClient";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { covertToNamedObject } from "../helper/converter";
 
 export default function useEtherian() {
   const account = useActiveAccount();
+
+  const { data, isLoading } = useReadContract({
+    contract,
+    method: "getTotalStories",
+    params: [],
+  });
 
   const createStoryProposal = async (storyDetails) => {
     if (!account) {
@@ -29,23 +32,42 @@ export default function useEtherian() {
     console.log(reciept);
   };
 
-  const storyProposed = async () => {
-    const storyProp = [];
+  const getAllStories = async () => {
+    const stories = [];
+    if (!isLoading) {
+      const totalStories = data;
+      for (let i = 0; i < totalStories; i++) {
+        let story = covertToNamedObject(
+          await readContract({
+            contract,
+            method: "getStoryDetails",
+            params: [i],
+          })
+        );
+        const chapters = [];
 
-    const events = await getContractEvents({
-      contract,
-      eventName: "StoryProposed",
-    });
+        for (let j = 0; j < story.totalChapters; j++) {
+          const chapter = covertToNamedObject(
+            await readContract({
+              contract,
+              method: "getChapter",
+              params: [i, j],
+            }),
+            "chapter"
+          );
+          chapters.push(chapter);
+        }
 
-    events.forEach((event) => {
-      storyProp.push(event);
-    });
+        story.chapters = chapters;
+        stories.push(story);
+      }
+    }
 
-    return storyProp;
+    return stories;
   };
 
   return {
     createStoryProposal,
-    storyProposed,
+    getAllStories,
   };
 }
