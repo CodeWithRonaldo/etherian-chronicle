@@ -11,11 +11,11 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 import { useStory } from "../../contexts/StoryContext";
 import { mockLeaderboard } from "../../mock-data/stories";
 import Avatar from "../../components/UI/Avatar/Avatar";
-import { userData } from "../../contexts/storyData";
+import { storyData } from "../../contexts/storyData";
 
 const HomePage = () => {
   const { stories, proposals, loading } = useStory();
-  const { allStories, isLoading } = useContext(userData);
+  const { allStories, isLoading } = useContext(storyData);
 
   const featuredStories = stories.slice(0, 5);
   const recentProposals = proposals.slice(0, 6);

@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export const userData = createContext({
+export const storyData = createContext({
   allStories: [],
   createStoryProposal: () => {},
   getAllStories: () => {},

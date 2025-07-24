@@ -6,8 +6,9 @@ import {
   covertToNamedObject,
   executeAndSignTransaction,
 } from "../helper/helper";
+import { storyData } from "./storyData";
 
-export const UserDataContext = ({ children }) => {
+export const StoryDataContext = ({ children }) => {
   const [allStories, setAllStories] = useState([]);
   const account = useActiveAccount();
 
@@ -69,7 +70,7 @@ export const UserDataContext = ({ children }) => {
   }, [getAllStories]);
 
   return (
-    <userData.Provider
+    <storyData.Provider
       value={{
         allStories,
         createStoryProposal,
@@ -78,6 +79,6 @@ export const UserDataContext = ({ children }) => {
       }}
     >
       {children}
-    </userData.Provider>
+    </storyData.Provider>
   );
 };
