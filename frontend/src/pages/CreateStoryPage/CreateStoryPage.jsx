@@ -7,7 +7,7 @@ import Button from "../../components/UI/Button/Button";
 import { useNotification } from "../../contexts/NotificationContext";
 import styles from "./CreateStoryPage.module.css";
 import { PinataSDK } from "pinata";
-import { userData } from "../../contexts/storyData";
+import { storyData } from "../../contexts/storyData";
 
 const CreateStoryPage = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const CreateStoryPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [dragOver, setDragOver] = useState(false);
-  const { createStoryProposal } = useContext(userData);
+  const { createStoryProposal } = useContext(storyData);
 
   const [formData, setFormData] = useState({
     title: "",
