@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import Input from "../../components/UI/Input/Input";
@@ -7,7 +7,7 @@ import Button from "../../components/UI/Button/Button";
 import { useNotification } from "../../contexts/NotificationContext";
 import styles from "./CreateStoryPage.module.css";
 import { PinataSDK } from "pinata";
-import useEtherian from "../../hooks/useEtherian";
+import { userData } from "../../contexts/userData";
 
 const CreateStoryPage = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const CreateStoryPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [dragOver, setDragOver] = useState(false);
-  const { createStoryProposal } = useEtherian();
+  const { createStoryProposal } = useContext(userData);
 
   const [formData, setFormData] = useState({
     title: "",
