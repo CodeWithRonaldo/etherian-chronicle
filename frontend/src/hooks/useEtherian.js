@@ -1,6 +1,7 @@
 import { prepareContractCall, readContract, sendTransaction } from "thirdweb";
 import { contract } from "../clients/thirdWebClient";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { covertToNamedObject } from "../helper/converter";
 
 export default function useEtherian() {
   const account = useActiveAccount();
@@ -35,17 +36,33 @@ export default function useEtherian() {
     const stories = [];
     if (!isLoading) {
       const totalStories = data;
-      console.log("total stories:", totalStories);
       for (let i = 0; i < totalStories; i++) {
-        const story = await readContract({
-          contract,
-          method: "stories",
-          params: [i],
-        });
-        console.log("story:", story);
+        let story = covertToNamedObject(
+          await readContract({
+            contract,
+            method: "getStoryDetails",
+            params: [i],
+          })
+        );
+        const chapters = [];
+
+        for (let j = 0; j < story.totalChapters; j++) {
+          const chapter = covertToNamedObject(
+            await readContract({
+              contract,
+              method: "getChapter",
+              params: [i, j],
+            }),
+            "chapter"
+          );
+          chapters.push(chapter);
+        }
+
+        story.chapters = chapters;
         stories.push(story);
       }
     }
+
     return stories;
   };
 
