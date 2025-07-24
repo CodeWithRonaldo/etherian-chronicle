@@ -4,6 +4,7 @@ import Button from "../../../UI/Button/Button";
 import Badge from "../../../UI/Badge/Badge";
 import Avatar from "../../../UI/Avatar/Avatar";
 import styles from "./StorySlideshow.module.css";
+import Jazzicon from "react-jazzicon";
 
 const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -67,35 +68,42 @@ const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {
       <div className={styles.slideContainer}>
         <div
           className={styles.slide}
-          style={{ backgroundImage: `url(${currentStory.coverImage})` }}
+          style={{ backgroundImage: `url(${currentStory?.ipfsHashImage})` }}
         >
           <div className={styles.overlay} />
           <div className={styles.content}>
-            <div className={styles.badges}>
+            {/* <div className={styles.badges}>
               <Badge variant={getGenreColor(currentStory.genre)}>
                 {currentStory.genre}
               </Badge>
               <Badge variant={getStatusVariant(currentStory.status)}>
                 {currentStory.status}
               </Badge>
-            </div>
+            </div> */}
 
-            <h2 className={styles.title}>{currentStory.title}</h2>
-            <p className={styles.summary}>{currentStory.summary}</p>
+            <h2 className={styles.title}>{currentStory?.title}</h2>
+            <p className={styles.summary}>
+              {currentStory?.summary.slice(0, 115)}
+              {"..."}
+            </p>
 
             <div className={styles.creator}>
-              <Avatar
+              {/* <Avatar
                 src={currentStory.creator.avatar}
                 alt={currentStory.creator.username}
                 size="medium"
-              />
+              /> */}
+              <Jazzicon diameter={40} seed={currentStory?.writer} />
               <div className={styles.creatorInfo}>
                 <span className={styles.creatorName}>
-                  by {currentStory.creator.username}
+                  by{" "}
+                  {`${currentStory?.writer.slice(
+                    0,
+                    5
+                  )}...${currentStory?.writer.slice(-4)}`}
                 </span>
                 <div className={styles.stats}>
-                  {currentStory.stats.totalReaders.toLocaleString()} readers •
-                  {currentStory.stats.totalVotes.toLocaleString()} votes
+                  {12} readers • {44} votes
                 </div>
               </div>
             </div>
@@ -103,7 +111,7 @@ const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {
             <div className={styles.actions}>
               <Button
                 as={Link}
-                to={`/stories/${currentStory.id}`}
+                to={`/stories/${currentStory.storId}`}
                 size="large"
                 style={{
                   fontSize: "var(--font-size-lg)",
