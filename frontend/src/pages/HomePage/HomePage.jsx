@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import StorySlideshow from "../../components/Features/Story/StorySlideshow/StorySlideshow";
@@ -17,11 +17,15 @@ const HomePage = () => {
   const { stories, proposals, loading } = useStory();
   const { allStories, isLoading } = useContext(storyData);
 
-  const featuredStories = stories.slice(0, 5);
+  const featuredStories = allStories.slice(0, 5);
   const recentProposals = proposals.slice(0, 6);
   const topCommunityMembers = mockLeaderboard.slice(0, 5);
 
-  if (loading) {
+  useEffect(() => {
+    console.log(allStories);
+  }, [allStories]);
+
+  if (isLoading) {
     return <PageContainer loading={true} />;
   }
 

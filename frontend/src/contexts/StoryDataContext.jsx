@@ -47,6 +47,7 @@ export const StoryDataContext = ({ children }) => {
         story.chapters = chapters;
         stories.push(story);
       }
+
       setAllStories(stories);
     }
   }, [data]);
