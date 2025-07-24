@@ -40,8 +40,8 @@ const HomePage = () => {
         description="Discover the most captivating stories being crafted by our community"
       >
         <PageContainer.Grid columns={3}>
-          {stories.slice(0, 3).map((story) => (
-            <StoryCard key={story.id} story={story} />
+          {allStories.slice(0, 3).map((story) => (
+            <StoryCard key={story.storyId} story={story} />
           ))}
         </PageContainer.Grid>
         <div style={{ textAlign: "center", marginTop: "var(--space-8)" }}>

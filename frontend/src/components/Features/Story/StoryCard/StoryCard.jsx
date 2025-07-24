@@ -1,17 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Card from '../../../UI/Card/Card';
-import Badge from '../../../UI/Badge/Badge';
-import Avatar from '../../../UI/Avatar/Avatar';
-import ProgressBar from '../../../UI/ProgressBar/ProgressBar';
-import styles from './StoryCard.module.css'; 
+import React from "react";
+import { Link } from "react-router-dom";
+import Card from "../../../UI/Card/Card";
+import Badge from "../../../UI/Badge/Badge";
+import Avatar from "../../../UI/Avatar/Avatar";
+import ProgressBar from "../../../UI/ProgressBar/ProgressBar";
+import styles from "./StoryCard.module.css";
+import Jazzicon from "react-jazzicon";
 
-const StoryCard = ({ 
-  story, 
-  variant = 'default',
+const StoryCard = ({
+  story,
+  variant = "default",
   showOverlay = false,
   loading = false,
-  onClick 
+  onClick,
 }) => {
   if (loading) {
     return (
@@ -21,8 +22,22 @@ const StoryCard = ({
         </div>
         <Card.Body className={styles.content}>
           <div className={styles.header}>
-            <div style={{ height: '1.5rem', background: 'var(--gray-200)', borderRadius: 'var(--radius-md)', marginBottom: 'var(--space-2)' }} />
-            <div style={{ height: '1rem', background: 'var(--gray-200)', borderRadius: 'var(--radius-md)', width: '60%' }} />
+            <div
+              style={{
+                height: "1.5rem",
+                background: "var(--gray-200)",
+                borderRadius: "var(--radius-md)",
+                marginBottom: "var(--space-2)",
+              }}
+            />
+            <div
+              style={{
+                height: "1rem",
+                background: "var(--gray-200)",
+                borderRadius: "var(--radius-md)",
+                width: "60%",
+              }}
+            />
           </div>
         </Card.Body>
       </Card>
@@ -31,36 +46,29 @@ const StoryCard = ({
 
   const getStatusVariant = (status) => {
     switch (status) {
-      case 'active': return 'success';
-      case 'completed': return 'primary';
-      case 'pending': return 'warning';
-      default: return 'neutral';
+      case "active":
+        return "success";
+      case "completed":
+        return "primary";
+      case "pending":
+        return "warning";
+      default:
+        return "neutral";
     }
   };
 
   const getGenreColor = (genre) => {
     const genreColors = {
-      fantasy: 'primary',
-      'sci-fi': 'secondary',
-      mystery: 'accent',
-      romance: 'error',
-      horror: 'neutral',
-      drama: 'warning',
-      steampunk: 'secondary',
+      fantasy: "primary",
+      "sci-fi": "secondary",
+      mystery: "accent",
+      romance: "error",
+      horror: "neutral",
+      drama: "warning",
+      steampunk: "secondary",
     };
-    return genreColors[genre] || 'neutral';
+    return genreColors[genre] || "neutral";
   };
-
-  const formatNumber = (num) => {
-    if (num >= 1000) {
-      return `${(num / 1000).toFixed(1)}k`;
-    }
-    return num.toString();
-  };
-
-  const completionPercentage = story.totalChapters > 0 
-    ? (story.currentChapter / story.totalChapters) * 100 
-    : 0;
 
   const handleClick = (e) => {
     if (onClick) {
@@ -72,36 +80,36 @@ const StoryCard = ({
   const cardContent = (
     <>
       <div className={styles.imageContainer}>
-        <img 
-          src={story.coverImage} 
+        <img
+          src={story.ipfsHashImage}
           alt={`Cover for ${story.title}`}
           className={styles.image}
         />
-        
-        <Badge 
-          variant={getStatusVariant(story.status)}
+
+        <Badge
+          variant={getStatusVariant("active")}
           className={styles.statusBadge}
         >
-          {story.status}
+          {"Active"}
         </Badge>
-        
-        <Badge 
-          variant={getGenreColor(story.genre)}
-          className={styles.genreBadge}
-        >
-          {story.genre}
+
+        <Badge variant={getGenreColor("fantasy")} className={styles.genreBadge}>
+          {"Fantasy"}
         </Badge>
 
         {showOverlay && (
           <div className={styles.overlay}>
             <h3 className={styles.overlayTitle}>{story.title}</h3>
             <div className={styles.overlayCreator}>
-              <Avatar 
+              {/* <Avatar
                 src={story.creator.avatar}
                 alt={story.creator.username}
                 size="small"
-              />
-              <span>by {story.creator.username}</span>
+              /> */}
+              <Jazzicon diameter={30} seed={story?.writer} />
+              <span>
+                by {`${story?.writer.slice(0, 5)}...${story?.writer.slice(-4)}`}
+              </span>
             </div>
           </div>
         )}
@@ -109,20 +117,26 @@ const StoryCard = ({
 
       <Card.Body className={styles.content}>
         <header className={styles.header}>
-          <h3 className={styles.title}>{story.title}</h3>
+          <h3 className={styles.title}>{story?.title}</h3>
           {!showOverlay && (
             <div className={styles.creator}>
-              <Avatar 
+              {/* <Avatar 
                 src={story.creator.avatar}
                 alt={story.creator.username}
                 size="small"
-              />
-              <span>by {story.creator.username}</span>
+              /> */}
+              <Jazzicon diameter={30} seed={story?.writer} />
+              <span>
+                by {`${story?.writer.slice(0, 5)}...${story?.writer.slice(-4)}`}
+              </span>
             </div>
           )}
         </header>
 
-        <p className={styles.summary}>{story.summary}</p>
+        <p className={styles.summary}>
+          {story?.summary.slice(0, 85)}
+          {"..."}
+        </p>
 
         {story.tags && story.tags.length > 0 && (
           <div className={styles.tags}>
@@ -142,21 +156,15 @@ const StoryCard = ({
         <div className={styles.metadata}>
           <div className={styles.stats}>
             <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {formatNumber(story.stats.totalReaders)}
-              </span>
+              <span className={styles.statValue}>{14}</span>
               <span className={styles.statLabel}>Readers</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {formatNumber(story.stats.totalVotes)}
-              </span>
+              <span className={styles.statValue}>{22}</span>
               <span className={styles.statLabel}>Votes</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue}>
-                {story.stats.averageRating.toFixed(1)}
-              </span>
+              <span className={styles.statValue}>{3}</span>
               <span className={styles.statLabel}>Rating</span>
             </div>
           </div>
@@ -165,15 +173,13 @@ const StoryCard = ({
     </>
   );
 
-  const cardClasses = [
-    styles.card,
-    styles[variant],
-    loading && styles.loading,
-  ].filter(Boolean).join(' ');
+  const cardClasses = [styles.card, styles[variant], loading && styles.loading]
+    .filter(Boolean)
+    .join(" ");
 
   if (onClick) {
     return (
-      <Card 
+      <Card
         className={cardClasses}
         interactive
         onClick={handleClick}
@@ -187,9 +193,9 @@ const StoryCard = ({
   }
 
   return (
-    <Link 
-      to={`/stories/${story.id}`}
-      style={{ textDecoration: 'none', color: 'inherit' }}
+    <Link
+      to={`/stories/${story.storyId}`}
+      style={{ textDecoration: "none", color: "inherit" }}
       aria-label={`View story: ${story.title}`}
     >
       <Card className={cardClasses} interactive>
