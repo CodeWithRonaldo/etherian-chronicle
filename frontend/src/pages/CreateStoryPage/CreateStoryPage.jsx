@@ -7,7 +7,7 @@ import Button from "../../components/UI/Button/Button";
 import { useNotification } from "../../contexts/NotificationContext";
 import styles from "./CreateStoryPage.module.css";
 import { PinataSDK } from "pinata";
-import { userData } from "../../contexts/userData";
+import { userData } from "../../contexts/storyData";
 
 const CreateStoryPage = () => {
   const navigate = useNavigate();

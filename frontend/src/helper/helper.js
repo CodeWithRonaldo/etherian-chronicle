@@ -1,3 +1,5 @@
+import { prepareContractCall, sendTransaction } from "thirdweb";
+import { contract } from "../clients/thirdWebClient";
 export function covertToNamedObject(objectData, objectType = "story") {
   const {
     0: chapterId,
@@ -53,3 +55,24 @@ export function covertToNamedObject(objectData, objectType = "story") {
     };
   }
 }
+
+export const executeAndSignTransaction = async (
+  method,
+  params,
+  account,
+  listener
+) => {
+  const transaction = prepareContractCall({
+    contract,
+    method: method,
+    params: params,
+  });
+
+  const reciept = await sendTransaction({
+    transaction,
+    account,
+  });
+
+  console.log(reciept);
+  listener();
+};

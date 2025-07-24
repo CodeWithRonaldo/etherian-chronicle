@@ -1,9 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { userData } from "./userData";
+import { useCallback, useEffect, useState } from "react";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { contract } from "../clients/thirdWebClient";
-import { prepareContractCall, readContract, sendTransaction } from "thirdweb";
-import { covertToNamedObject } from "../helper/converter";
+import { readContract } from "thirdweb";
+import {
+  covertToNamedObject,
+  executeAndSignTransaction,
+} from "../helper/helper";
 
 export const UserDataContext = ({ children }) => {
   const [allStories, setAllStories] = useState([]);
@@ -54,19 +56,12 @@ export const UserDataContext = ({ children }) => {
       return;
     }
 
-    const tx = prepareContractCall({
-      contract,
-      method: "createStoryProposal",
-      params: storyDetails,
-    });
-
-    const reciept = await sendTransaction({
-      transaction: tx,
-      account: account,
-    });
-
-    console.log(reciept);
-    getAllStories();
+    executeAndSignTransaction(
+      "createStoryProposal",
+      storyDetails,
+      account,
+      getAllStories
+    );
   };
 
   useEffect(() => {
@@ -79,6 +74,7 @@ export const UserDataContext = ({ children }) => {
         allStories,
         createStoryProposal,
         getAllStories,
+        isLoading,
       }}
     >
       {children}

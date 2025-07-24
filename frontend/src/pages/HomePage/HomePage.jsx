@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import StorySlideshow from "../../components/Features/Story/StorySlideshow/StorySlideshow";
@@ -11,13 +11,11 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 import { useStory } from "../../contexts/StoryContext";
 import { mockLeaderboard } from "../../mock-data/stories";
 import Avatar from "../../components/UI/Avatar/Avatar";
-import { userData } from "../../contexts/userData";
+import { userData } from "../../contexts/storyData";
 
 const HomePage = () => {
   const { stories, proposals, loading } = useStory();
-  const { allStories } = useContext(userData);
-
-  console.log(allStories);
+  const { allStories, isLoading } = useContext(userData);
 
   const featuredStories = stories.slice(0, 5);
   const recentProposals = proposals.slice(0, 6);
