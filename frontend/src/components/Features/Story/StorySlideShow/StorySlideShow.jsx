@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "../../../UI/Button/Button";
 import Badge from "../../../UI/Badge/Badge";
 import Avatar from "../../../UI/Avatar/Avatar";
-import styles from "./StorySlideshow.module.css";
+import styles from "./StorySlideShow.module.css";
 import Jazzicon from "react-jazzicon";
 
 const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {

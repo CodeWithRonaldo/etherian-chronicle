@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
-import StorySlideshow from "../../components/Features/Story/StorySlideshow/StorySlideshow";
 import ProposalCarousel from "../../components/Features/Proposal/ProposalCarousel/ProposalCarousel";
 import StoryCard from "../../components/Features/Story/StoryCard/StoryCard";
 import Button from "../../components/UI/Button/Button";
@@ -12,9 +11,10 @@ import { useStory } from "../../contexts/StoryContext";
 import { mockLeaderboard } from "../../mock-data/stories";
 import Avatar from "../../components/UI/Avatar/Avatar";
 import { storyData } from "../../contexts/storyData";
+import StorySlideshow from "../../components/Features/Story/StorySlideShow/StorySlideShow";
 
 const HomePage = () => {
-  const { stories, proposals, loading } = useStory();
+  const { stories, proposals, _loading } = useStory();
   const { allStories, isLoading } = useContext(storyData);
 
   const featuredStories = allStories.slice(0, 5);
