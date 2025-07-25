@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "../../../UI/Button/Button";
-import Badge from "../../../UI/Badge/Badge";
-import Avatar from "../../../UI/Avatar/Avatar";
 import styles from "./StorySlideShow.module.css";
-import Jazzicon from "react-jazzicon";
+import { Blobbie } from "thirdweb/react";
+import { formatAddress } from "../../../../helper/helper";
 
 const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -88,19 +87,15 @@ const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {
             </p>
 
             <div className={styles.creator}>
-              {/* <Avatar
-                src={currentStory.creator.avatar}
-                alt={currentStory.creator.username}
-                size="medium"
-              /> */}
-              <Jazzicon diameter={40} seed={currentStory?.writer} />
+              <Blobbie
+                address={currentStory?.writer}
+                size={35}
+                style={{ borderRadius: "50%" }}
+              />
               <div className={styles.creatorInfo}>
                 <span className={styles.creatorName}>
-                  by{" "}
-                  {`${currentStory?.writer.slice(
-                    0,
-                    5
-                  )}...${currentStory?.writer.slice(-4)}`}
+                  by
+                  {formatAddress(currentStory?.writer)}
                 </span>
                 <div className={styles.stats}>
                   {12} readers • {44} votes

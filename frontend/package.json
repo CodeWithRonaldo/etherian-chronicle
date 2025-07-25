@@ -14,7 +14,6 @@
     "pinata": "^2.4.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-jazzicon": "^1.0.4",
     "react-router-dom": "^7.7.0",
     "tailwindcss": "^4.1.11",
     "thirdweb": "^5.105.16",

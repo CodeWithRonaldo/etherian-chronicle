@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Card from "../../../UI/Card/Card";
 import Badge from "../../../UI/Badge/Badge";
-import Avatar from "../../../UI/Avatar/Avatar";
-import ProgressBar from "../../../UI/ProgressBar/ProgressBar";
 import styles from "./StoryCard.module.css";
 import Jazzicon from "react-jazzicon";
+import { formatAddress } from "../../../../helper/helper";
+import { Blobbie } from "thirdweb/react";
 
 const StoryCard = ({
   story,
@@ -87,29 +87,26 @@ const StoryCard = ({
         />
 
         <Badge
-          variant={getStatusVariant("active")}
+          variant={getStatusVariant("completed")}
           className={styles.statusBadge}
         >
-          {"Active"}
+          {"Completed"}
         </Badge>
 
-        <Badge variant={getGenreColor("fantasy")} className={styles.genreBadge}>
-          {"Fantasy"}
+        <Badge variant={getGenreColor("mystery")} className={styles.genreBadge}>
+          {"Mystery"}
         </Badge>
 
         {showOverlay && (
           <div className={styles.overlay}>
-            <h3 className={styles.overlayTitle}>{story.title}</h3>
+            <h3 className={styles.overlayTitle}>{story?.title}</h3>
             <div className={styles.overlayCreator}>
-              {/* <Avatar
-                src={story.creator.avatar}
-                alt={story.creator.username}
-                size="small"
-              /> */}
-              <Jazzicon diameter={30} seed={story?.writer} />
-              <span>
-                by {`${story?.writer.slice(0, 5)}...${story?.writer.slice(-4)}`}
-              </span>
+              <Blobbie
+                address={story.writer}
+                size={35}
+                style={{ borderRadius: "50%" }}
+              />
+              <span>by {formatAddress(story.writer)}</span>
             </div>
           </div>
         )}

@@ -253,10 +253,10 @@ const ProposalDetailPage = () => {
 
               <div className={styles.firstChapter}>
                 <h3 className={styles.chapterTitle}>
-                  {story.chapters[0]?.chapertDetails?.contentTitle}
+                  {story.chapters[0]?.ipfsDetails?.contentTitle}
                 </h3>
                 <div className={styles.chapterContent}>
-                  {story.chapters[0]?.chapertDetails?.content}
+                  {story.chapters[0]?.ipfsDetails?.content}
                 </div>
 
                 <div className={styles.chapterChoices}>
