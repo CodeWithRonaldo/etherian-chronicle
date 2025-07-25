@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Card from "../../../UI/Card/Card";
 import Badge from "../../../UI/Badge/Badge";
 import styles from "./StoryCard.module.css";
-import Jazzicon from "react-jazzicon";
 import { formatAddress } from "../../../../helper/helper";
 import { Blobbie } from "thirdweb/react";
 
@@ -117,12 +116,11 @@ const StoryCard = ({
           <h3 className={styles.title}>{story?.title}</h3>
           {!showOverlay && (
             <div className={styles.creator}>
-              {/* <Avatar 
-                src={story.creator.avatar}
-                alt={story.creator.username}
-                size="small"
-              /> */}
-              <Jazzicon diameter={30} seed={story?.writer} />
+              <Blobbie
+                address={story.writer}
+                size={35}
+                style={{ borderRadius: "50%" }}
+              />
               <span>
                 by {`${story?.writer.slice(0, 5)}...${story?.writer.slice(-4)}`}
               </span>
