@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import PageBanner from "../../components/Layout/PageBanner/PageBanner";
@@ -7,19 +7,23 @@ import Badge from "../../components/UI/Badge/Badge";
 import Avatar from "../../components/UI/Avatar/Avatar";
 import { useStory } from "../../contexts/StoryContext";
 import styles from "./ProposalsPage.module.css";
+import { convertStoryStatus, formatAddress } from "../../helper/helper";
+import { StoryData } from "../../contexts/storyData";
+import { Blobbie } from "thirdweb/react";
 
 const ProposalsPage = () => {
   const { proposals, loading } = useStory();
+  const { allStories, isLoading } = useContext(StoryData);
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     status: "all",
     genre: "all",
-    sortBy: "newest",
+    sortBy: "alphabetical",
   });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
-  const statuses = ["all", "pending", "approved", "rejected"];
+  const statuses = ["all", "pending", "active", "rejected", "paused"];
   const genres = [
     "all",
     "fantasy",
@@ -40,46 +44,51 @@ const ProposalsPage = () => {
   ];
 
   const filteredProposals = useMemo(() => {
-    let filtered = [...proposals];
+    let filtered = [...allStories];
 
     // Apply status filter
     if (filters.status !== "all") {
       filtered = filtered.filter(
-        (proposal) => proposal.status === filters.status
+        (proposal) =>
+          convertStoryStatus(proposal.Storystatus) === filters.status
       );
     }
 
     // Apply genre filter
     if (filters.genre !== "all") {
       filtered = filtered.filter(
-        (proposal) => proposal.genre === filters.genre
+        (proposal) =>
+          proposal.chapters[0]?.chapertDetails?.genre === filters.genre
       );
     }
 
     // Apply sorting
     switch (filters.sortBy) {
-      case "newest":
-        filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        break;
-      case "oldest":
-        filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-        break;
+      // case "newest":
+      //   filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      //   break;
+      // case "oldest":
+      //   filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      //   break;
       case "votes":
         filtered.sort(
-          (a, b) => b.votes.yes + b.votes.no - (a.votes.yes + a.votes.no)
+          (a, b) =>
+            b.proposalYesVotes +
+            b.proposalNoVotes -
+            (a.proposalYesVotes + a.proposalNoVotes)
         );
         break;
-      case "deadline":
-        filtered.sort(
-          (a, b) => new Date(a.votingDeadline) - new Date(b.votingDeadline)
-        );
-        break;
+      // case "deadline":
+      //   filtered.sort(
+      //     (a, b) => new Date(a.votingDeadline) - new Date(b.votingDeadline)
+      //   );
+      //   break;
       default:
         break;
     }
 
     return filtered;
-  }, [proposals, filters]);
+  }, [allStories, filters]);
 
   const totalPages = Math.ceil(filteredProposals.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -94,7 +103,7 @@ const ProposalsPage = () => {
   };
 
   const handleProposalClick = (proposal) => {
-    navigate(`/proposals/${proposal.id}`);
+    navigate(`/proposals/${proposal.storyId}`);
   };
 
   const getStatusVariant = (status) => {
@@ -271,17 +280,20 @@ const ProposalsPage = () => {
           <>
             <div className={styles.proposalsGrid}>
               {paginatedProposals.map((proposal) => {
-                const timeRemaining = getTimeRemaining(proposal.votingDeadline);
-                const totalVotes = proposal.votes.yes + proposal.votes.no;
+                const timeRemaining = getTimeRemaining(
+                  Number(proposal?.proposalVoteEndTime)
+                );
+                const totalVotes =
+                  proposal.proposalYesVotes + proposal.proposalNoVotes;
 
                 return (
                   <div
-                    key={proposal.id}
+                    key={proposal.storyId}
                     className={styles.proposalCard}
                     onClick={() => handleProposalClick(proposal)}
                   >
                     <img
-                      src={proposal.coverImage}
+                      src={proposal.ipfsHashImage}
                       alt={`Cover for ${proposal.title}`}
                       className={styles.proposalImage}
                     />
@@ -289,11 +301,19 @@ const ProposalsPage = () => {
                     <div className={styles.proposalContent}>
                       <div className={styles.proposalHeader}>
                         <div className={styles.proposalBadges}>
-                          <Badge variant={getStatusVariant(proposal.status)}>
-                            {proposal.status}
+                          <Badge
+                            variant={getStatusVariant(
+                              convertStoryStatus(proposal.StoryStatus)
+                            )}
+                          >
+                            {convertStoryStatus(proposal.storyStatus)}
                           </Badge>
-                          <Badge variant={getGenreColor(proposal.genre)}>
-                            {proposal.genre}
+                          <Badge
+                            variant={getGenreColor(
+                              proposal?.chapters[0]?.ipfsDetails?.genre
+                            )}
+                          >
+                            {proposal?.chapters[0]?.ipfsDetails?.genre}
                           </Badge>
                         </div>
 
@@ -302,12 +322,12 @@ const ProposalsPage = () => {
                         </h3>
 
                         <div className={styles.proposalCreator}>
-                          <Avatar
-                            src={proposal.creator.avatar}
-                            alt={proposal.creator.username}
-                            size="small"
+                          <Blobbie
+                            address={proposal.writer}
+                            size={35}
+                            style={{ borderRadius: "50%" }}
                           />
-                          <span>by {proposal.creator.username}</span>
+                          <span>by {formatAddress(proposal.writer)}</span>
                         </div>
                       </div>
 
@@ -332,7 +352,7 @@ const ProposalsPage = () => {
                                 clipRule="evenodd"
                               />
                             </svg>
-                            {proposal.votes.yes}
+                            {proposal.proposalYesVotes}
                           </div>
                           <div
                             className={`${styles.voteStat} ${styles.voteStatNo}`}
@@ -349,7 +369,7 @@ const ProposalsPage = () => {
                                 clipRule="evenodd"
                               />
                             </svg>
-                            {proposal.votes.no}
+                            {proposal.proposalNoVotes}
                           </div>
                           <div className={styles.voteStat}>
                             {totalVotes} total
