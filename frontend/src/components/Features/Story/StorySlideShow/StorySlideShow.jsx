@@ -72,14 +72,14 @@ const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {
         >
           <div className={styles.overlay} />
           <div className={styles.content}>
-            {/* <div className={styles.badges}>
+            <div className={styles.badges}>
               <Badge variant={getGenreColor(currentStory.genre)}>
                 {currentStory.genre}
               </Badge>
               <Badge variant={getStatusVariant(currentStory.status)}>
                 {currentStory.status}
               </Badge>
-            </div> */}
+            </div>
 
             <h2 className={styles.title}>{currentStory?.title}</h2>
             <p className={styles.summary}>

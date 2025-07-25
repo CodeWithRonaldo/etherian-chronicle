@@ -4,6 +4,8 @@ import Badge from "../../../UI/Badge/Badge";
 import Avatar from "../../../UI/Avatar/Avatar";
 import Button from "../../../UI/Button/Button";
 import styles from "./ProposalCarousel.module.css";
+import { formatAddress } from "../../../../helper/helper";
+import { Blobbie } from "thirdweb/react";
 
 const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
   const scrollContainerRef = useRef(null);
@@ -33,18 +35,18 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
     }
   };
 
-  const getStatusVariant = (status) => {
-    switch (status) {
-      case "pending":
-        return "warning";
-      case "approved":
-        return "success";
-      case "rejected":
-        return "error";
-      default:
-        return "neutral";
-    }
-  };
+  // const getStatusVariant = (status) => {
+  //   switch (status) {
+  //     case "0":
+  //       return "warning";
+  //     case "1":
+  //       return "success";
+  //     case "2":
+  //       return "error";
+  //     default:
+  //       return "neutral";
+  //   }
+  // };
 
   const getGenreColor = (genre) => {
     const genreColors = {
@@ -55,7 +57,7 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
       horror: "neutral",
       drama: "warning",
       steampunk: "secondary",
-      dystopian: "neutral",
+      others: "neutral",
     };
     return genreColors[genre] || "neutral";
   };
@@ -135,27 +137,33 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
       >
         <div className={styles.proposalsContainer}>
           {proposals.map((proposal) => {
-            const timeRemaining = getTimeRemaining(proposal.votingDeadline);
-            const totalVotes = proposal.votes.yes + proposal.votes.no;
+            const timeRemaining = getTimeRemaining(
+              Number(proposal.proposalVoteEndTime)
+            );
+            const totalVotes =
+              Number(proposal.proposalYesVotes) +
+              Number(proposal.proposalNoVotes);
 
             return (
               <Link
-                key={proposal.id}
-                to={`/proposals/${proposal.id}`}
+                key={proposal.storyId}
+                to={`/proposals/${proposal.storyId}`}
                 className={styles.proposalCard}
               >
                 <div className={styles.imageContainer}>
                   <img
-                    src={proposal.coverImage}
+                    src={proposal.ipfsHashImage}
                     alt={`Cover for ${proposal.title}`}
                     className={styles.image}
                   />
                   <div className={styles.badges}>
-                    <Badge variant={getStatusVariant(proposal.status)}>
-                      {proposal.status}
-                    </Badge>
-                    <Badge variant={getGenreColor(proposal.genre)}>
-                      {proposal.genre}
+                    <Badge variant={"success"}>Active</Badge>
+                    <Badge
+                      variant={getGenreColor(
+                        proposal.chapters[0].ipfsDetails.genre.toLowerCase()
+                      )}
+                    >
+                      {proposal.chapters[0].ipfsDetails.genre}
                     </Badge>
                   </div>
                 </div>
@@ -164,12 +172,12 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
                   <h3 className={styles.proposalTitle}>{proposal.title}</h3>
 
                   <div className={styles.creator}>
-                    <Avatar
-                      src={proposal.creator.avatar}
-                      alt={proposal.creator.username}
-                      size="small"
+                    <Blobbie
+                      address={proposal.writer}
+                      size={25}
+                      style={{ borderRadius: "50%" }}
                     />
-                    <span>by {proposal.creator.username}</span>
+                    <span>by {formatAddress(proposal.writer)}</span>
                   </div>
 
                   <p className={styles.summary}>{proposal.summary}</p>
@@ -189,7 +197,7 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
                             clipRule="evenodd"
                           />
                         </svg>
-                        {proposal.votes.yes}
+                        {Number(proposal.proposalYesVotes)}
                       </div>
                       <div className={styles.voteStat}>
                         <svg
@@ -204,7 +212,7 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
                             clipRule="evenodd"
                           />
                         </svg>
-                        {proposal.votes.no}
+                        {Number(proposal.proposalNoVotes)}
                       </div>
                       <span className={styles.totalVotes}>
                         {totalVotes} total

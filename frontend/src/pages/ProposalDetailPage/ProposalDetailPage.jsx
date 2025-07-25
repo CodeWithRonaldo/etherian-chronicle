@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import VotingInterface from "../../components/Features/Story/VotingInterface/VotingInterface";
@@ -9,20 +9,33 @@ import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
 import { useStory } from "../../contexts/StoryContext";
 import { useNotification } from "../../contexts/NotificationContext";
 import styles from "./ProposalDetailPage.module.css";
+import { StoryData } from "../../contexts/storyData";
+import { Blobbie } from "thirdweb/react";
+import { formatAddress } from "../../helper/helper";
 
 const ProposalDetailPage = () => {
   const { id } = useParams();
-  const { proposals, userVotes, voteOnProposal } = useStory();
+  const { userVotes, voteOnProposal } = useStory();
   const { showSuccess, showError } = useNotification();
   const [timeRemaining, setTimeRemaining] = useState("");
+  const [story, setStory] = useState();
 
-  const proposal = proposals.find((p) => p.id === id);
+  const { getStory, _isLoading } = useContext(StoryData);
 
   useEffect(() => {
-    if (proposal?.votingDeadline) {
+    const getStoryDetails = async () => {
+      const storyDetails = await getStory(id);
+      setStory(storyDetails);
+    };
+
+    getStoryDetails();
+  }, [id, getStory]);
+
+  useEffect(() => {
+    if (story?.proposalVoteEndTime) {
       const updateTimeRemaining = () => {
         const now = new Date();
-        const deadlineDate = new Date(proposal.votingDeadline);
+        const deadlineDate = new Date(Number(story.proposalVoteEndTime));
         const diff = deadlineDate.getTime() - now.getTime();
 
         if (diff <= 0) {
@@ -50,9 +63,9 @@ const ProposalDetailPage = () => {
 
       return () => clearInterval(interval);
     }
-  }, [proposal?.votingDeadline]);
+  }, [story?.proposalVoteEndTime]);
 
-  if (!proposal) {
+  if (!story) {
     return (
       <PageContainer>
         <div className={styles.errorState}>
@@ -70,25 +83,26 @@ const ProposalDetailPage = () => {
 
   const handleVote = async (vote) => {
     try {
-      await voteOnProposal(proposal.id, vote);
+      await voteOnProposal(story.storyId, vote);
       showSuccess(`Your ${vote} vote has been recorded!`);
     } catch (error) {
       showError("Failed to record your vote. Please try again.");
+      console.log(error);
     }
   };
 
-  const getStatusVariant = (status) => {
-    switch (status) {
-      case "pending":
-        return "warning";
-      case "approved":
-        return "success";
-      case "rejected":
-        return "error";
-      default:
-        return "neutral";
-    }
-  };
+  // const getStatusVariant = (status) => {
+  //   switch (status) {
+  //     case "pending":
+  //       return "warning";
+  //     case "approved":
+  //       return "success";
+  //     case "rejected":
+  //       return "error";
+  //     default:
+  //       return "neutral";
+  //   }
+  // };
 
   const getGenreColor = (genre) => {
     const genreColors = {
@@ -103,23 +117,32 @@ const ProposalDetailPage = () => {
     return genreColors[genre] || "neutral";
   };
 
-  const totalVotes = proposal.votes.yes + proposal.votes.no;
+  const totalVotes = story.chapters.reduce(
+    (sum, chapter) => sum + Number(chapter.voteCountSum),
+    0
+  );
   const yesPercentage =
-    totalVotes > 0 ? Math.round((proposal.votes.yes / totalVotes) * 100) : 0;
+    totalVotes > 0
+      ? Math.round((Number(story.proposalYesVotes) / totalVotes) * 100)
+      : 0;
   const noPercentage =
-    totalVotes > 0 ? Math.round((proposal.votes.no / totalVotes) * 100) : 0;
-  const userVote = userVotes[`proposal-${proposal.id}`];
-  const isVotingClosed = new Date() > new Date(proposal.votingDeadline);
+    totalVotes > 0
+      ? Math.round((Number(story.proposalNoVotes) / totalVotes) * 100)
+      : 0;
+  const userVote = userVotes[`proposal-${story.storyId}`];
+  const isVotingClosed =
+    new Date() > new Date(Number(story.proposalVoteEndTime));
   const isUrgent =
-    new Date(proposal.votingDeadline).getTime() - new Date().getTime() <
+    new Date(Number(story.proposalVoteEndTime)).getTime() -
+      new Date().getTime() <
     24 * 60 * 60 * 1000;
 
   // Determine voting outcome
   let voteOutcome = null;
   if (isVotingClosed) {
-    if (proposal.votes.yes > proposal.votes.no) {
+    if (Number(story.proposalYesVotes) > Number(story.proposalNoVotes)) {
       voteOutcome = "approved";
-    } else if (proposal.votes.no > proposal.votes.yes) {
+    } else if (Number(story.proposalNoVotes) > Number(story.proposalYesVotes)) {
       voteOutcome = "rejected";
     } else {
       voteOutcome = "tied";
@@ -139,52 +162,56 @@ const ProposalDetailPage = () => {
             Proposals
           </Link>
           <span className={styles.breadcrumbSeparator}>/</span>
-          <span>{proposal.title}</span>
+          <span>{story.title}</span>
         </nav>
 
         {/* Header */}
         <header className={styles.header}>
           <img
-            src={proposal.coverImage}
-            alt={`Cover for ${proposal.title}`}
+            src={story.ipfsHashImage}
+            alt={`Cover for ${story.title}`}
             className={styles.coverImage}
           />
 
           <div className={styles.titleSection}>
             <div className={styles.titleContent}>
-              <h1 className={styles.title}>{proposal.title}</h1>
+              <h1 className={styles.title}>{story.title}</h1>
 
               <div className={styles.creator}>
-                <Avatar
-                  src={proposal.creator.avatar}
-                  alt={proposal.creator.username}
-                  size="large"
+                <Blobbie
+                  address={story.writer}
+                  size={35}
+                  style={{ borderRadius: "50%" }}
                 />
                 <div className={styles.creatorInfo}>
                   <Link
-                    to={`/profile/${proposal.creator.id}`}
+                    to={`/profile/${story.writer}`}
                     className={styles.creatorName}
                   >
-                    {proposal.creator.username}
+                    {formatAddress(story.writer)}
                   </Link>
-                  <div className={styles.creatorMeta}>
+                  {/* <div className={styles.creatorMeta}>
                     Proposed {new Date(proposal.createdAt).toLocaleDateString()}
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
               <div className={styles.badges}>
-                <Badge variant={getStatusVariant(proposal.status)}>
-                  {proposal.status}
+                <Badge variant={"success"}>Active</Badge>
+                <Badge
+                  variant={getGenreColor(
+                    story.chapters[0]?.chapertDetails?.genre
+                  )}
+                >
+                  {story.chapters[0]?.chapertDetails?.genre}
                 </Badge>
-                <Badge variant={getGenreColor(proposal.genre)}>
-                  {proposal.genre}
-                </Badge>
-                {proposal.tags?.slice(0, 3).map((tag) => (
-                  <Badge key={tag} variant="neutral" size="small">
-                    {tag}
-                  </Badge>
-                ))}
+                {story.chapters[0]?.chapertDetails?.tags
+                  ?.slice(0, 3)
+                  .map((tag) => (
+                    <Badge key={tag} variant="neutral" size="small">
+                      {tag}
+                    </Badge>
+                  ))}
               </div>
             </div>
 
@@ -200,7 +227,7 @@ const ProposalDetailPage = () => {
             </div>
           </div>
 
-          <p className={styles.summary}>{proposal.summary}</p>
+          <p className={styles.summary}>{story.summary}</p>
         </header>
 
         {/* Content */}
@@ -226,10 +253,10 @@ const ProposalDetailPage = () => {
 
               <div className={styles.firstChapter}>
                 <h3 className={styles.chapterTitle}>
-                  {proposal.firstChapter.title}
+                  {story.chapters[0]?.chapertDetails?.contentTitle}
                 </h3>
                 <div className={styles.chapterContent}>
-                  {proposal.firstChapter.content}
+                  {story.chapters[0]?.chapertDetails?.content}
                 </div>
 
                 <div className={styles.chapterChoices}>
@@ -243,8 +270,8 @@ const ProposalDetailPage = () => {
                   >
                     Initial Choices:
                   </h4>
-                  {proposal.firstChapter.choices.map((choice, index) => (
-                    <div key={choice.id} className={styles.choice}>
+                  {story.chapters[0].choices?.map((choice, index) => (
+                    <div key={index} className={styles.choice}>
                       <div className={styles.choiceLabel}>
                         Option {index + 1}:
                       </div>
@@ -258,21 +285,21 @@ const ProposalDetailPage = () => {
             {/* Voting Interface */}
             {!isVotingClosed && (
               <VotingInterface
-                title="Vote on this Proposal"
+                title="Vote on this status"
                 subtitle="Should this story be approved for the community to develop?"
                 choices={[
                   {
                     id: "yes",
                     text: "Yes, approve this story proposal",
-                    votes: proposal.votes.yes,
+                    votes: story.proposalYesVotes,
                   },
                   {
                     id: "no",
                     text: "No, this proposal needs improvement",
-                    votes: proposal.votes.no,
+                    votes: story.proposalNoVotes,
                   },
                 ]}
-                deadline={proposal.votingDeadline}
+                deadline={story.proposalVoteEndTime}
                 onVote={handleVote}
                 userVote={userVote}
                 showResults={!!userVote}
@@ -304,8 +331,8 @@ const ProposalDetailPage = () => {
                     {voteOutcome === "rejected" && "REJECTED"}
                     {voteOutcome === "tied" && "TIED (requires review)"}
                   </span>{" "}
-                  by the community with {proposal.votes.yes} yes votes and{" "}
-                  {proposal.votes.no} no votes.
+                  by the community with {story.proposalYesVotes} yes votes and{" "}
+                  {story.proposalNoVotes} no votes.
                   {voteOutcome === "approved" &&
                     " The story will now be available for collaborative development."}
                   {voteOutcome === "rejected" &&
@@ -336,7 +363,7 @@ const ProposalDetailPage = () => {
                     <div
                       className={`${styles.voteStatValue} ${styles.voteStatValueYes}`}
                     >
-                      {proposal.votes.yes}
+                      {story.proposalYesVotes}
                     </div>
                     <div className={styles.voteStatLabel}>Yes Votes</div>
                     <div
@@ -353,7 +380,7 @@ const ProposalDetailPage = () => {
                     <div
                       className={`${styles.voteStatValue} ${styles.voteStatValueNo}`}
                     >
-                      {proposal.votes.no}
+                      {story.proposalNoVotes}
                     </div>
                     <div className={styles.voteStatLabel}>No Votes</div>
                     <div
@@ -421,40 +448,10 @@ const ProposalDetailPage = () => {
                     <br />
                     <small>
                       Deadline:{" "}
-                      {new Date(proposal.votingDeadline).toLocaleDateString()}{" "}
+                      {new Date(story.proposalVoteEndTime).toLocaleDateString()}{" "}
                       at{" "}
-                      {new Date(proposal.votingDeadline).toLocaleTimeString()}
+                      {new Date(story.proposalVoteEndTime).toLocaleTimeString()}
                     </small>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Tags */}
-            {proposal.tags && proposal.tags.length > 0 && (
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Tags
-                </h3>
-                <div className={styles.tags}>
-                  <div className={styles.tagsList}>
-                    {proposal.tags.map((tag) => (
-                      <Badge key={tag} variant="neutral">
-                        {tag}
-                      </Badge>
-                    ))}
                   </div>
                 </div>
               </div>

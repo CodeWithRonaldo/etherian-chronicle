@@ -7,18 +7,36 @@ import Button from "../../components/UI/Button/Button";
 import Card from "../../components/UI/Card/Card";
 import Badge from "../../components/UI/Badge/Badge";
 import LoadingSpinner from "../../components/UI/LoadingSpinner/LoadingSpinner";
-import { useStory } from "../../contexts/StoryContext";
 import { mockLeaderboard } from "../../mock-data/stories";
 import Avatar from "../../components/UI/Avatar/Avatar";
-import { storyData } from "../../contexts/storyData";
+import { StoryData } from "../../contexts/storyData";
 import StorySlideshow from "../../components/Features/Story/StorySlideShow/StorySlideShow";
 
 const HomePage = () => {
-  const { stories, proposals, _loading } = useStory();
-  const { allStories, isLoading } = useContext(storyData);
+  const { allStories, isLoading } = useContext(StoryData);
 
-  const featuredStories = allStories.slice(0, 5);
-  const recentProposals = proposals.slice(0, 6);
+  const featuredStories = allStories
+    .filter((story) => {
+      return story.storyStatus !== 0 && story.storyStatus !== 2;
+    })
+    .slice(0, 5);
+
+  const popularVotes = allStories
+    .filter((story) => {
+      const totalVotes = story.chapters.reduce(
+        (sum, chapter) => sum + Number(chapter.voteCountSum),
+        0
+      );
+      return totalVotes > 0;
+    })
+    .slice(0, 3);
+
+  const recentProposals = allStories
+    .filter((story) => {
+      return story.storyStatus === 0;
+    })
+    .slice(0, 5);
+
   const topCommunityMembers = mockLeaderboard.slice(0, 5);
 
   useEffect(() => {
@@ -40,7 +58,7 @@ const HomePage = () => {
         description="Discover the most captivating stories being crafted by our community"
       >
         <PageContainer.Grid columns={3}>
-          {allStories.slice(0, 3).map((story) => (
+          {popularVotes.map((story) => (
             <StoryCard key={story.storyId} story={story} />
           ))}
         </PageContainer.Grid>

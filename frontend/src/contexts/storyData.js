@@ -1,8 +1,9 @@
 import { createContext } from "react";
 
-export const storyData = createContext({
+export const StoryData = createContext({
   allStories: [],
   createStoryProposal: () => {},
   getAllStories: () => {},
+  getStory: () => {},
   isLoading: Boolean,
 });

@@ -18,7 +18,7 @@ export function covertToNamedObject(objectData, objectType = "story") {
     3: summary,
     4: ipfsHashImage,
     5: collaborators,
-    6: StoryStatus,
+    6: storyStatus,
     7: proposalVoteEndTime,
     8: proposalYesVotes,
     9: proposalNoVotes,
@@ -35,7 +35,7 @@ export function covertToNamedObject(objectData, objectType = "story") {
       summary,
       ipfsHashImage,
       collaborators,
-      StoryStatus,
+      storyStatus,
       proposalVoteEndTime,
       proposalYesVotes,
       proposalNoVotes,
@@ -75,4 +75,30 @@ export const executeAndSignTransaction = async (
 
   console.log(reciept);
   listener();
+};
+
+export const getIpfsDetails = async (ipfsUrl) => {
+  const request = await fetch(ipfsUrl);
+  if (!request.ok) {
+    throw new Error("Failed to fetch IPFS data");
+  }
+  return await request.json();
+};
+
+export const convertStoryStatus = (status) => {
+  switch (status) {
+    case "0":
+      return "pending";
+    case "1":
+      return "Active";
+    case "2":
+      return "Rejected";
+    default:
+      return "Paused";
+  }
+};
+
+export const formatAddress = (address) => {
+  if (!address) return "";
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };

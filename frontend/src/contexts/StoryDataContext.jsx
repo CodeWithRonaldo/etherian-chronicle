@@ -5,8 +5,9 @@ import { readContract } from "thirdweb";
 import {
   covertToNamedObject,
   executeAndSignTransaction,
+  getIpfsDetails,
 } from "../helper/helper";
-import { storyData } from "./storyData";
+import { StoryData } from "./storyData";
 
 export const StoryDataContext = ({ children }) => {
   const [allStories, setAllStories] = useState([]);
@@ -41,16 +42,53 @@ export const StoryDataContext = ({ children }) => {
             }),
             "chapter"
           );
+          const chapertDetails = await getIpfsDetails(chapter.ipfsHash);
+          chapter.ipfsDetails = chapertDetails;
           chapters.push(chapter);
         }
 
         story.chapters = chapters;
+
         stories.push(story);
       }
 
       setAllStories(stories);
     }
   }, [data]);
+
+  const getStory = useCallback(
+    async (id) => {
+      if (data) {
+        let story = covertToNamedObject(
+          await readContract({
+            contract,
+            method: "getStoryDetails",
+            params: [id],
+          })
+        );
+        const chapters = [];
+
+        for (let j = 0; j < story.totalChapters; j++) {
+          const chapter = covertToNamedObject(
+            await readContract({
+              contract,
+              method: "getChapter",
+              params: [id, j],
+            }),
+            "chapter"
+          );
+          const chapertDetails = await getIpfsDetails(chapter.ipfsHash);
+          chapter.ipfsDetails = chapertDetails;
+          chapters.push(chapter);
+        }
+
+        story.chapters = chapters;
+
+        return story;
+      }
+    },
+    [data]
+  );
 
   const createStoryProposal = async (storyDetails) => {
     if (!account) {
@@ -71,15 +109,16 @@ export const StoryDataContext = ({ children }) => {
   }, [getAllStories]);
 
   return (
-    <storyData.Provider
+    <StoryData.Provider
       value={{
         allStories,
         createStoryProposal,
         getAllStories,
+        getStory,
         isLoading,
       }}
     >
       {children}
-    </storyData.Provider>
+    </StoryData.Provider>
   );
 };
