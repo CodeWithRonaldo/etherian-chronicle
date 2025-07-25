@@ -4,15 +4,12 @@ import PageContainer from "../../components/Layout/PageContainer/PageContainer";
 import PageBanner from "../../components/Layout/PageBanner/PageBanner";
 import Button from "../../components/UI/Button/Button";
 import Badge from "../../components/UI/Badge/Badge";
-import Avatar from "../../components/UI/Avatar/Avatar";
-import { useStory } from "../../contexts/StoryContext";
 import styles from "./ProposalsPage.module.css";
 import { convertStoryStatus, formatAddress } from "../../helper/helper";
 import { StoryData } from "../../contexts/storyData";
 import { Blobbie } from "thirdweb/react";
 
 const ProposalsPage = () => {
-  const { proposals, loading } = useStory();
   const { allStories, isLoading } = useContext(StoryData);
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
@@ -154,7 +151,7 @@ const ProposalsPage = () => {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <PageContainer>
         <div className={styles.container}>
