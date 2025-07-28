@@ -206,7 +206,6 @@ const CreateStoryPage = () => {
         `https://black-far-coyote-812.mypinata.cloud/ipfs/${content.cid}`,
         formData.choices,
         formData.collaborators,
-        86400n,
       ];
 
       console.log(storyDetails);

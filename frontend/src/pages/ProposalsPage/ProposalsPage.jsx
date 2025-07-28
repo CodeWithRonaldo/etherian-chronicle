@@ -11,6 +11,8 @@ import { Blobbie } from "thirdweb/react";
 
 const ProposalsPage = () => {
   const { allStories, isLoading } = useContext(StoryData);
+  console.log(allStories);
+
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     status: "all",
@@ -40,8 +42,12 @@ const ProposalsPage = () => {
     { value: "deadline", label: "Deadline Soon" },
   ];
 
+  const storyProposal = allStories.filter((proposal) => {
+    return proposal.storyStatus === 0;
+  });
+
   const filteredProposals = useMemo(() => {
-    let filtered = [...allStories];
+    let filtered = [...storyProposal];
 
     // Apply status filter
     if (filters.status !== "all") {

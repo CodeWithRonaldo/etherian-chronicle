@@ -113,7 +113,7 @@ const StoriesPage = () => {
   };
 
   const handleStoryClick = (story) => {
-    navigate(`/stories/${story.Storyid}`);
+    navigate(`/stories/${story.storyId}`);
   };
 
   if (isLoading) {

@@ -4,6 +4,7 @@ import Button from "../../../UI/Button/Button";
 import styles from "./StorySlideShow.module.css";
 import { Blobbie } from "thirdweb/react";
 import { formatAddress } from "../../../../helper/helper";
+import Badge from "../../../UI/Badge/Badge";
 
 const StorySlideshow = ({ stories, autoPlay = true, interval = 5000 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);

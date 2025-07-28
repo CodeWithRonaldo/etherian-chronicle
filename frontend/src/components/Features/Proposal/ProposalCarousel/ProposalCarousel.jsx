@@ -158,13 +158,14 @@ const ProposalCarousel = ({ proposals, title = "Recent Proposals" }) => {
                   />
                   <div className={styles.badges}>
                     <Badge variant={"success"}>Active</Badge>
-                    <Badge
+                    {/* <Badge
                       variant={getGenreColor(
-                        proposal.chapters[0].ipfsDetails.genre.toLowerCase()
+                        proposal.chapters[0].ipfsDetails.genre.toLowerCase() ||
+                          "none"
                       )}
                     >
-                      {proposal.chapters[0].ipfsDetails.genre}
-                    </Badge>
+                      {proposal.chapters[0].ipfsDetails.genre || "none"}
+                    </Badge> */}
                   </div>
                 </div>
 
